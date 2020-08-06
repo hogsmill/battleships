@@ -8,8 +8,9 @@
     <div v-if="!showAbout" class="main">
       <h1>Agile Battleships</h1>
       <div class="names">
-        <MyName v-bind:socket="socket" />
         <GameName  v-bind:socket="socket" />
+        <MyName v-bind:socket="socket" />
+        <OtherName />
       </div>
       <div class="container">
         <div class="row">
@@ -28,6 +29,7 @@ import AboutView from "./components/about/AboutView.vue";
 
 import GameName from "./components/GameName.vue";
 import MyName from "./components/MyName.vue";
+import OtherName from "./components/OtherName.vue";
 import Board from "./components/Board.vue";
 
 export default {
@@ -37,6 +39,7 @@ export default {
     AboutView,
     GameName,
     MyName,
+    OtherName,
     Board
   },
   computed: {
@@ -45,6 +48,9 @@ export default {
     },
     myName() {
       return this.$store.getters.getMyName;
+    },
+    otherName() {
+      return this.$store.getters.getOtherName;
     },
     gameName() {
       return this.$store.getters.getGameName;
@@ -79,6 +85,7 @@ export default {
 
     this.socket.on("updatePlayers", (data) => {
       if (this.gameName == data.gameName) {
+        data.player = this.myName
         this.$store.dispatch("updatePlayers", data)
       }
     })
@@ -92,10 +99,8 @@ export default {
     position: relative;
 
     .names {
-      width: 300px;
-      position: absolute;
-      top: 9px;
-      right: 0;
+      height: 50px;
+      text-align: center;
     }
   }
 

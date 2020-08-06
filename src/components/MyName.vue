@@ -1,10 +1,10 @@
 <template>
-  <div class="my-name float-right" v-if="!showAbout">
+  <div class="my-name" v-if="!showAbout">
       <button class="btn btn-sm btn-secondary smaller-font" v-if="!myName" @click="show">Set My Name</button>
       <span v-if="myName" @click="show" class="mr-2 mt-2 pointer p-2 bg-light">I am: {{myName.name}}</span>
 
     <modal name="set-my-name" :height="120" :classes="['rounded', 'set-my-name']">
-      <div class="float-right mr-2 mt-1">
+      <div class="mr-2 mt-1">
         <button type="button" class="close" @click="hide" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -68,6 +68,11 @@ export default {
 </script>
 
 <style lang="scss">
+
+.my-name {
+  width: 120px; 
+  display: inline-block
+}
 
 .set-my-name {
   height: 120px;

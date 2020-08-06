@@ -7,8 +7,8 @@ export const store = new Vuex.Store({
   state: {
     showAbout: false,
     myName: '',
+    theirName: '',
     gameName: '',
-    players: [],
   },
   getters: {
     getShowAbout: (state) => {
@@ -17,11 +17,11 @@ export const store = new Vuex.Store({
     getMyName: (state) => {
       return state.myName;
     },
+    getTheirName: (state) => {
+      return state.theirName;
+    },
     getGameName: (state) => {
       return state.gameName;
-    },
-    getPlayers: (state) => {
-      return state.players
     }
   },
   mutations: {
@@ -31,14 +31,22 @@ export const store = new Vuex.Store({
     setMyName: (state, payload) => {
       state.myName = payload;
     },
+    updatePlayers: (state, payload) => {
+      state.players = payload.players;
+      var i = 0;
+      while (i < state.players.length) {
+        if (state.players[i].id != state.myName.id) {
+          state.theirName = state.players[i]
+        }
+        i++
+      }
+      console.log(state)
+    },
     loadGame: (state, payload) => {
       state.players = payload.players;
     },
     updateGameName: (state, payload) => {
       state.gameName = payload;
-    },
-    updatePlayers: (state, payload) => {
-      state.players = payload.players
     }
   },
   actions: {
@@ -48,14 +56,14 @@ export const store = new Vuex.Store({
     setMyName: ({ commit }, payload) => {
       commit("setMyName", payload);
     },
+    updatePlayers: ({ commit }, payload) => {
+      commit("updatePlayers", payload);
+    },
     loadGame: ({ commit }, payload) => {
       commit("loadGame", payload);
     },
     updateGameName: ({ commit }, payload) => {
       commit("updateGameName", payload);
-    },
-    updatePlayers: ({ commit }, payload) => {
-      commit("updatePlayers", payload);
     }
   }
 });

@@ -3,7 +3,21 @@
   <table>
     <tr>
       <td>
-        <table class="board">
+        <h3 :class="{'no-header': !theirName}">{{theirName.name}}'s Board</h3>
+        <table class="board their-board">
+          <tr>
+           <td class="header"></td>
+           <td class="header" v-for="(column, col) in columns" :key="col">{{column}}</td>
+          </tr>
+          <tr v-for="(row, r) in rows" :key="r">
+            <td class="header">{{row}}</td>
+            <td v-for="(col, c) in columns" :key="c" :id="rows[r] + columns[c]"></td>
+          </tr>
+        </table>
+      </td>
+      <td>
+        <h3>My Board</h3>
+        <table class="board my-board">
           <tr>
            <td class="header"></td>
            <td class="header" v-for="(column, col) in columns" :key="col">{{column}}</td>
@@ -53,6 +67,9 @@ export default {
     myName() {
       return this.$store.getters.getMyName;
     },
+    theirName() {
+      return this.$store.getters.getTheirName;
+    },
     gameName() {
       return this.$store.getters.getGameName;
     }
@@ -65,6 +82,10 @@ export default {
   $cell-size: 50px;
   $header-color: #86c6ea;
 
+  .no-header {
+    color: #fff;
+  }
+  
   table.board {
     margin: 0 auto;
 

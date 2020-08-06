@@ -1,10 +1,10 @@
 <template>
-  <div class="game-name float-right" v-if="!showAbout">
-      <button class="btn btn-sm btn-secondary smaller-font" v-if="!gameName" @click="show">Set Game Name</button>
-      <span v-if="gameName" @click="show" class="mr-2 mt-2 pointer p-2 bg-light">Game: {{gameName}}</span>
+  <div class="game-name" v-if="!showAbout">
+      <button class="name btn btn-sm btn-secondary smaller-font" v-if="!gameName" @click="show">Set Game Name</button>
+      <span v-if="gameName" @click="show" class="name mr-2 mt-2 pointer p-2 bg-light">Game: {{gameName}}</span>
 
     <modal name="set-game-name" :height="120" :classes="['rounded', 'set-game-name']">
-      <div class="float-right mr-2 mt-1">
+      <div class="mr-2 mt-1">
         <button type="button" class="close" @click="hide" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -54,6 +54,10 @@ export default {
 
 <style lang="scss">
 
+.game-name {
+  width: 120px;
+  display: inline-block
+}
 .set-game-name {
 
   #game-name {
