@@ -9,6 +9,7 @@ export const store = new Vuex.Store({
     myName: '',
     theirName: '',
     gameName: '',
+    players: []
   },
   getters: {
     getShowAbout: (state) => {
@@ -22,6 +23,10 @@ export const store = new Vuex.Store({
     },
     getGameName: (state) => {
       return state.gameName;
+    },
+    getMyBoard: (state) => {
+      console.log(state)
+      return []
     }
   },
   mutations: {
@@ -40,7 +45,14 @@ export const store = new Vuex.Store({
         }
         i++
       }
-      console.log(state)
+    },
+    removePlayer: (state, payload) => {
+      if (state.myName.id == payload.player.id) {
+        state.myName = ''
+      }
+      if (state.theirName.id == payload.player.id) {
+        state.theirName = ''
+      }
     },
     loadGame: (state, payload) => {
       state.players = payload.players;
@@ -58,6 +70,9 @@ export const store = new Vuex.Store({
     },
     updatePlayers: ({ commit }, payload) => {
       commit("updatePlayers", payload);
+    },
+    removePlayer: ({ commit }, payload) => {
+      commit("removePlayer", payload);
     },
     loadGame: ({ commit }, payload) => {
       commit("loadGame", payload);

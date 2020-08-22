@@ -23,30 +23,30 @@ function emit(event, data) {
   io.emit(event, data)
 }
 
-function loadGame(data) {
+function doDb(fun, data) {
   MongoClient.connect(url, { useUnifiedTopology: true }, function (err, client) {
     if (err) throw err;
     var db = client.db('db');
-    dbStore.loadGame(err, client, db, io, data, debugOn)
+
+    switch(fun) {
+      case 'loadGame':
+        dbStore.loadGame(err, client, db, io, data, debugOn)
+        break;
+      case 'addPlayer':
+        dbStore.addPlayer(err, client, db, io, data, debugOn)
+        break;
+      case 'removePlayer':
+        dbStore.removePlayer(err, client, db, io, data, debugOn)
+        break;
+      case 'changeName':
+        dbStore.changeName(err, client, db, io, data, debugOn)
+        break;
+      case 'placeBoat':
+        dbStore.placeBoat(err, client, db, io, data, debugOn)
+        break;
+    }
   })
 }
-
-function addPlayer(data) {
-  MongoClient.connect(url, { useUnifiedTopology: true }, function (err, client) {
-    if (err) throw err;
-    var db = client.db('db');
-    dbStore.addPlayer(err, client, db, io, data, debugOn)
-  })
-}
-
-function changeName(data) {
-  MongoClient.connect(url, { useUnifiedTopology: true }, function (err, client) {
-    if (err) throw err;
-    var db = client.db('db');
-    dbStore.changeName(err, client, db, io, data, debugOn)
-  })
-}
-
 io.on("connection", (socket) => {
   connections = connections + 1
   if (connections > maxConnections) {
@@ -61,11 +61,15 @@ io.on("connection", (socket) => {
     connectDebugOff || console.log(`User with socket id ${socket.id} has disconnected. (${connections} connections)`)
   })
 
-  socket.on("loadGame", (data) => { loadGame(data) });
+  socket.on("loadGame", (data) => { doDb('loadGame', data) })
 
-  socket.on("changeName", (data) => { changeName(data) })
+  socket.on("changeName", (data) => { doDb('changeName', data) })
 
-  socket.on("addPlayer", (data) => { addPlayer(data) });
+  socket.on("addPlayer", (data) => { doDb('addPlayer', data) })
+
+  socket.on("removePlayer", (data) => { doDb('removePlayer', data) })
+
+  socket.on("placeBoat", (data) => { doDb('placeBoat', data) })
 
 });
 

@@ -77,6 +77,10 @@ export default {
       this.$store.dispatch("updateGameName", gameName)
     }
 
+    if (myName && gameName) {
+      this.socket.emit("addPlayer", {gameName: gameName, player: myName})
+    }
+
     this.socket.on("loadGame", (data) => {
       if (this.gameName == data.gameName) {
         this.$store.dispatch("loadGame", data)
@@ -85,8 +89,14 @@ export default {
 
     this.socket.on("updatePlayers", (data) => {
       if (this.gameName == data.gameName) {
-        data.player = this.myName
+      console.log('updatePlayers', data)
         this.$store.dispatch("updatePlayers", data)
+      }
+    })
+
+    this.socket.on("removePlayer", (data) => {
+      if (this.gameName == data.gameName) {
+        this.$store.dispatch("removePlayer", data)
       }
     })
   }

@@ -24,15 +24,15 @@
           </tr>
           <tr v-for="(row, r) in rows" :key="r">
             <td class="header">{{row}}</td>
-            <td v-for="(col, c) in columns" :key="c" :id="rows[r] + columns[c]"></td>
+            <td class="board-cell" v-for="(col, c) in columns" :key="c" :id="'c' + r + '-' + c" @click="place(r, c)" @mouseover="highlight(r, c)"></td>
           </tr>
         </table>
       </td>
       <td>
-        <div v-for="(boat, b) in boats" :key="b" class="place">
-          <button class="btn btn-sm btn-secondary smaller-font horizontal" @click="place(boat, 'horizontal')">&#x2192;</button>
-          <button class="btn btn-sm btn-secondary smaller-font vertical" @click="place(boat, 'vertical')">&#x2193;</button>
-          <div class="boat" :class="boat"></div>
+        <div v-for="(boat, b) in boats" :key="b" class="place" :class="{selected: selectedBoat.name == boat.name}">
+          <button class="btn btn-sm btn-secondary smaller-font horizontal" @click="selectBoat(boat, 'horizontal')" :title="'Place ' + boat.name + ' horizontally'">&#x2192;</button>
+          <button class="btn btn-sm btn-secondary smaller-font vertical" @click="selectBoat(boat, 'vertical')" :title="'Place ' + boat.name + ' vertically'">&#x2193;</button>
+          <div class="boat" :class="boat.name"></div>
         </div>
       </td>
     </tr>
@@ -41,6 +41,8 @@
 </template>
 
 <script>
+import board from '../lib/board.js'
+
 export default {
   props: [
     'socket'
@@ -50,22 +52,42 @@ export default {
       columns: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
       rows: ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'],
       boats: [
-        'carrier',
-        'battleship',
-        'destroyer',
-        'submarine',
-        'patrol-boat'
-      ]
+        {name: 'carrier', placed: false, size: 5},
+        {name: 'battleship', placed: false, size: 4},
+        {name: 'submarine', placed: false, size: 3},
+        {name: 'destroyer', placed: false, size: 3},
+        {name: 'patrol-boat', placed: false, size: 2}
+      ],
+      selectedOrientation: '',
+      selectedBoat: ''
     }
   },
   methods: {
-    place(boat, orientation) {
-      alert('Place ' + boat + ' ' + orientation + 'ly')
+    selectBoat(boat, orientation) {
+      this.selectedBoat = boat
+      this.selectedOrientation = orientation
+    },
+    highlight(r, c) {
+      if (this.selectedBoat && this.selectedOrientation) {
+        board.highlight(r, c, this.selectedBoat, this.selectedOrientation)
+      }
+    },
+    place(r, c) {
+      if (this.selectedBoat && this.selectedOrientation && board.canPlaceBoat(this.selectedBoat, r, c, this.selectedOrientation, this.myBoard)) {
+        console.log('Placing ' + this.selectedBoat.name + ' ' + this.selectedOrientation + 'ly at (' + this.rows[r] + ', ' + this.columns[c] + ')')
+        this.socket.emit("placeBoat", {gameName: this.gameName, name: this.myName, boat: this.selectedBoat, orientation: this.selectedOrientation, row: r, column: c})
+        this.selectedBoat = ''
+        this.selectedOrientation = ''
+        board.select()
+      }
     }
   },
   computed: {
     myName() {
       return this.$store.getters.getMyName;
+    },
+    myBoard() {
+      return this.$store.getters.getMyBoard;
     },
     theirName() {
       return this.$store.getters.getTheirName;
@@ -85,9 +107,17 @@ export default {
   .no-header {
     color: #fff;
   }
-  
+
   table.board {
     margin: 0 auto;
+
+    .highlighted {
+      background-color: red;
+    }
+
+    .selected {
+      background-color: green;
+    }
 
     td {
       border: 1px solid #ccc;
@@ -104,7 +134,11 @@ export default {
 
   .place {
     position: relative;
+    border: 2px solid #fff;
 
+    &.selected {
+      border-color: red;
+    }
     button {
       display: inline-block;
       width: 36px;
@@ -134,6 +168,12 @@ export default {
       &.destroyer { background-image: url("../assets/img/destroyer.png"); }
       &.submarine { background-image: url("../assets/img/submarine.png"); }
       &.patrol-boat { background-image: url("../assets/img/patrol-boat.png"); }
+
+      button {
+        &:hover {
+          cursor: pointer;
+        }
+      }
     }
   }
 
