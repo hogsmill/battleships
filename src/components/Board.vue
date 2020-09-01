@@ -24,7 +24,9 @@
           </tr>
           <tr v-for="(row, r) in rows" :key="r">
             <td class="header">{{row}}</td>
-            <td class="board-cell" v-for="(col, c) in columns" :key="c" :id="'c' + r + '-' + c" @click="place(r, c)" @mouseover="highlight(r, c)"></td>
+            <td class="board-cell" :class="{'selected': cellBoat(r, c) != ''}" v-for="(col, c) in columns" :key="c" :id="'c' + r + '-' + c" @click="place(r, c)" @mouseover="highlight(r, c)">
+              {{cellBoat(r, c)}}
+            </td>
           </tr>
         </table>
       </td>
@@ -42,6 +44,7 @@
 
 <script>
 import board from '../lib/board.js'
+import game from '../lib/gameState.js'
 
 export default {
   props: [
@@ -52,11 +55,11 @@ export default {
       columns: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
       rows: ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'],
       boats: [
-        {name: 'carrier', placed: false, size: 5},
-        {name: 'battleship', placed: false, size: 4},
-        {name: 'submarine', placed: false, size: 3},
-        {name: 'destroyer', placed: false, size: 3},
-        {name: 'patrol-boat', placed: false, size: 2}
+        {name: 'carrier', size: 5},
+        {name: 'battleship', size: 4},
+        {name: 'submarine', size: 3},
+        {name: 'destroyer', size: 3},
+        {name: 'patrol-boat', size: 2}
       ],
       selectedOrientation: '',
       selectedBoat: ''
@@ -73,12 +76,23 @@ export default {
       }
     },
     place(r, c) {
-      if (this.selectedBoat && this.selectedOrientation && board.canPlaceBoat(this.selectedBoat, r, c, this.selectedOrientation, this.myBoard)) {
+      var myBoard = game.myBoard(this.gameState, this.myName)
+      if (this.selectedBoat && this.selectedOrientation && board.canPlaceBoat(this.selectedBoat, r, c, this.selectedOrientation, myBoard)) {
         console.log('Placing ' + this.selectedBoat.name + ' ' + this.selectedOrientation + 'ly at (' + this.rows[r] + ', ' + this.columns[c] + ')')
         this.socket.emit("placeBoat", {gameName: this.gameName, name: this.myName, boat: this.selectedBoat, orientation: this.selectedOrientation, row: r, column: c})
         this.selectedBoat = ''
         this.selectedOrientation = ''
-        board.select()
+      }
+    },
+    cellBoat(r, c) {
+      if (this.gameState.length && this.myName) {
+        var myBoard = game.myBoard(this.gameState, this.myName)
+        var val = board.cellValue(r, c, myBoard)
+        if (val) {
+           return val.split('')[0].toUpperCase()
+        } else {
+          return ''
+        }
       }
     }
   },
@@ -86,14 +100,14 @@ export default {
     myName() {
       return this.$store.getters.getMyName;
     },
-    myBoard() {
-      return this.$store.getters.getMyBoard;
-    },
     theirName() {
       return this.$store.getters.getTheirName;
     },
     gameName() {
       return this.$store.getters.getGameName;
+    },
+    gameState() {
+      return this.$store.getters.getGameState;
     }
   }
 }
@@ -117,6 +131,8 @@ export default {
 
     .selected {
       background-color: green;
+      font-weight: bold;
+      color: #fff;
     }
 
     td {

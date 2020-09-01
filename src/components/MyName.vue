@@ -43,7 +43,7 @@ export default {
       if (!oldName.id) {
         var uuid = uuidv4()
         myNameData = {id: uuid, name: newName}
-        this.socket.emit("addPlayer", {gameName: this.gameName, player: myNameData})
+        this.socket.emit("addPlayer", {gameName: this.gameName, player: myNameData, move: 0})
         this.$store.dispatch("setMyName", myNameData)
       } else {
         myNameData = {id: this.myName.id, name: newName}

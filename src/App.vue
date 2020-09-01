@@ -14,6 +14,7 @@
       </div>
       <div class="container">
         <div class="row">
+          <Moves />
           <Board v-bind:socket="socket" />
         </div>
       </div>
@@ -30,6 +31,7 @@ import AboutView from "./components/about/AboutView.vue";
 import GameName from "./components/GameName.vue";
 import MyName from "./components/MyName.vue";
 import OtherName from "./components/OtherName.vue";
+import Moves from "./components/Moves.vue";
 import Board from "./components/Board.vue";
 
 export default {
@@ -40,6 +42,7 @@ export default {
     GameName,
     MyName,
     OtherName,
+    Moves,
     Board
   },
   computed: {
@@ -87,10 +90,10 @@ export default {
       }
     })
 
-    this.socket.on("updatePlayers", (data) => {
+    this.socket.on("updateGameState", (data) => {
       if (this.gameName == data.gameName) {
-      console.log('updatePlayers', data)
-        this.$store.dispatch("updatePlayers", data)
+        console.log('updateGameState', data)
+        this.$store.dispatch("updateGameState", data)
       }
     })
 
