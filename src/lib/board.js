@@ -86,12 +86,19 @@ var Board = {
     return cellVal
   },
 
-  hitOrMiss: function(r, c, moves) {
+  hitOrMiss: function(r, c, moves, agile) {
     var val = ''
     if (moves) {
       for (var i = 0; i < moves.length; i++) {
         if (r == moves[i].row && c == moves[i].column) {
-          val = moves[i].hit ? 'hit' : 'miss'
+          if (moves[i].hit) {
+            val = 'hit'
+          } else {
+            val = 'miss'
+          }
+          if (agile == 'no') {
+            val = 'played'
+          }
         }
       }
     }

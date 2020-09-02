@@ -9,8 +9,27 @@ function createNewGame(data) {
   return game
 }
 
+function hitOrMissBoat(r, c, boat) {
+  var hit = false
+  if (boat.orientation == 'horizontal') {
+    if (r == boat.row && c >= boat.column && c < parseInt(boat.column + boat.boat.size)) {
+      hit = true
+    }
+  } else {
+    if (c == boat.column && r >= boat.row && r < boat.row + boat.boat.size) {
+      hit = true
+    }
+  }
+  return hit
+}
+
 function hitOrMiss(data, i, gameState) {
-  return Math.round(Math.random(2)) == 0
+  var board = i == 0 ? gameState[1].board : gameState[0].board
+  var hit = false
+  for (var j = 0; j < board.length; j++) {
+    hit = hit || hitOrMissBoat(data.row, data.column, board[j])
+  }
+  return hit
 }
 
 module.exports = {

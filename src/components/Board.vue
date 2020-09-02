@@ -80,8 +80,9 @@ export default {
     },
     hitOrMiss(r, c) {
       if (this.gameState.length && this.myName) {
+        var agile = game.myBoard(this.gameState, this.myName).agile
         var moves = game.myMoves(this.gameState, this.myName)
-        return board.hitOrMiss(r, c, moves)
+        return board.hitOrMiss(r, c, moves, agile)
       }
     },
     place(r, c) {
@@ -156,10 +157,14 @@ export default {
       }
 
       &.hit {
-        background-color: yellow;
+        background-color: green;
       }
 
       &.miss {
+        background-color: red;
+      }
+
+      &.played {
         background-color: #ccc;
       }
     }
