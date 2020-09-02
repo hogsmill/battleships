@@ -11,7 +11,7 @@
           </tr>
           <tr v-for="(row, r) in rows" :key="r">
             <td class="header">{{row}}</td>
-            <td v-for="(col, c) in columns" :key="c" :id="rows[r] + columns[c]"></td>
+            <td :class="hitOrMiss(r, c)" v-for="(col, c) in columns" :key="c" :id="rows[r] + columns[c]" @click="makeMove(r, c)"></td>
           </tr>
         </table>
       </td>
@@ -75,8 +75,17 @@ export default {
         board.highlight(r, c, this.selectedBoat, this.selectedOrientation)
       }
     },
+    makeMove(r, c) {
+      this.socket.emit("makeMove", {gameName: this.gameName, name: this.myName, row: r, column: c})
+    },
+    hitOrMiss(r, c) {
+      if (this.gameState.length && this.myName) {
+        var moves = game.myMoves(this.gameState, this.myName)
+        return board.hitOrMiss(r, c, moves)
+      }
+    },
     place(r, c) {
-      var myBoard = game.myBoard(this.gameState, this.myName)
+      var myBoard = game.myBoard(this.gameState, this.myName).board
       if (this.selectedBoat && this.selectedOrientation && board.canPlaceBoat(this.selectedBoat, r, c, this.selectedOrientation, myBoard)) {
         console.log('Placing ' + this.selectedBoat.name + ' ' + this.selectedOrientation + 'ly at (' + this.rows[r] + ', ' + this.columns[c] + ')')
         this.socket.emit("placeBoat", {gameName: this.gameName, name: this.myName, boat: this.selectedBoat, orientation: this.selectedOrientation, row: r, column: c})
@@ -86,7 +95,7 @@ export default {
     },
     cellBoat(r, c) {
       if (this.gameState.length && this.myName) {
-        var myBoard = game.myBoard(this.gameState, this.myName)
+        var myBoard = game.myBoard(this.gameState, this.myName).board
         var val = board.cellValue(r, c, myBoard)
         if (val) {
            return val.split('')[0].toUpperCase()
@@ -144,6 +153,14 @@ export default {
         background-color: $header-color;
         color: #fff;
         font-weight: bold;
+      }
+
+      &.hit {
+        background-color: yellow;
+      }
+
+      &.miss {
+        background-color: #ccc;
       }
     }
   }

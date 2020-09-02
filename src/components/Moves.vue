@@ -12,11 +12,10 @@ import game from '../lib/gameState.js'
 
 export default {
   methods: {
-
     movesDone() {
       var arr = [], myMove = 0
       if (this.gameState.length && this.myName) {
-        myMove = game.myMove(this.gameState, this.myName)
+        myMove = game.myMoves(this.gameState, this.myName).length
       }
       for (var i = 1; i <= myMove; i++) {
         arr.push(i)
@@ -26,7 +25,7 @@ export default {
     movesNotDone() {
       var arr = [], myMove = 0
       if (this.gameState.length && this.myName) {
-        myMove = game.myMove(this.gameState, this.myName)
+        myMove = game.myMoves(this.gameState, this.myName).length
       }
       for (var i = myMove + 1; i <= 40; i++) {
         arr.push(i)

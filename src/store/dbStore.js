@@ -9,6 +9,10 @@ function createNewGame(data) {
   return game
 }
 
+function hitOrMiss(data, i, gameState) {
+  return Math.round(Math.random(2)) == 0
+}
+
 module.exports = {
 
   loadGame: function(err, client, db, io, data, debugOn) {
@@ -43,7 +47,7 @@ module.exports = {
         var gameState = res.gameState
         if (!res.gameState.find(function(p) { return p.id == data.player.id })) {
           data.player.board = []
-          data.player.move = 0
+          data.player.moves = []
           gameState.push(data.player)
         }
         data.gameState = gameState
@@ -71,6 +75,31 @@ module.exports = {
         data.gameState = gameState
         io.emit("updateGameState", data)
         io.emit("removePlayer", data)
+        db.collection('battleships').updateOne({"_id": res._id}, {$set: {gameState: data.gameState}}, function(err, rec) {
+          if (err) throw err;
+        })
+      }
+    })
+  },
+
+  setAgile: function(err, client, db, io, data, debugOn) {
+
+    if (debugOn) { console.log('setAgile', data) }
+
+    db.collection('battleships').findOne({gameName: data.gameName}, function(err, res) {
+      if (err) throw err;
+      if (res) {
+        var gameState = res.gameState
+        var index = Math.round(Math.random(2)) == 0
+        if (index == 0) {
+          gameState[0].agile = 'yes'
+          gameState[1].agile = 'no'
+        } else {
+          gameState[0].agile = 'no'
+          gameState[1].agile = 'yes'
+        }
+        data.gameState = gameState
+        io.emit("updateGameState", data)
         db.collection('battleships').updateOne({"_id": res._id}, {$set: {gameState: data.gameState}}, function(err, rec) {
           if (err) throw err;
         })
@@ -121,6 +150,31 @@ module.exports = {
             }
             board.push({boat: data.boat, orientation: data.orientation, row: data.row, column: data.column})
             player.board = board
+          }
+          gameState.push(player)
+        }
+        data.gameState = gameState
+        io.emit("updateGameState", data)
+        db.collection('battleships').updateOne({"_id": res._id}, {$set: {gameState: data.gameState}}, function(err, rec) {
+          if (err) throw err;
+        })
+      }
+    })
+  },
+
+  makeMove: function(err, client, db, io, data, debugOn) {
+
+    if (debugOn) { console.log('makeMove', data) }
+
+    db.collection('battleships').findOne({gameName: data.gameName}, function(err, res) {
+      if (err) throw err;
+      if (res) {
+        var player, gameState = []
+        for (var i = 0; i < res.gameState.length; i++) {
+          player = res.gameState[i]
+          if (player.id == data.name.id) {
+            var hit = hitOrMiss(data, i, res.gameState)
+            player.moves.push({row: data.row, column: data.column, hit: hit})
           }
           gameState.push(player)
         }

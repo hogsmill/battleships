@@ -84,6 +84,18 @@ var Board = {
       }
     }
     return cellVal
+  },
+
+  hitOrMiss: function(r, c, moves) {
+    var val = ''
+    if (moves) {
+      for (var i = 0; i < moves.length; i++) {
+        if (r == moves[i].row && c == moves[i].column) {
+          val = moves[i].hit ? 'hit' : 'miss'
+        }
+      }
+    }
+    return val
   }
 }
 

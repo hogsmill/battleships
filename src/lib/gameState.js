@@ -2,10 +2,14 @@
 module.exports = {
 
   myBoard: function(gameState, name) {
-    return gameState[0].id == name.id ? gameState[0].board : gameState[1].board
+    return gameState[0].id == name.id ? gameState[0] : gameState[1]
   },
 
-  myMove: function(gameState, name) {
-    return gameState[0].id == name.id ? gameState[0].move : gameState[1].move
+  theirBoard: function(gameState, name) {
+    return gameState[0].id != name.id ? gameState[0] : gameState[1]
+  },
+
+  myMoves: function(gameState, name) {
+    return gameState[0].id == name.id ? gameState[0].moves : gameState[1].moves
   }
 }

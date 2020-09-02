@@ -38,11 +38,17 @@ function doDb(fun, data) {
       case 'removePlayer':
         dbStore.removePlayer(err, client, db, io, data, debugOn)
         break;
+      case 'setAgile':
+        dbStore.setAgile(err, client, db, io, data, debugOn)
+        break;
       case 'changeName':
         dbStore.changeName(err, client, db, io, data, debugOn)
         break;
       case 'placeBoat':
         dbStore.placeBoat(err, client, db, io, data, debugOn)
+        break;
+      case 'makeMove':
+        dbStore.makeMove(err, client, db, io, data, debugOn)
         break;
     }
   })
@@ -69,7 +75,11 @@ io.on("connection", (socket) => {
 
   socket.on("removePlayer", (data) => { doDb('removePlayer', data) })
 
+  socket.on("setAgile", (data) => { doDb('setAgile', data) })
+
   socket.on("placeBoat", (data) => { doDb('placeBoat', data) })
+
+  socket.on("makeMove", (data) => { doDb('makeMove', data) })
 
 });
 

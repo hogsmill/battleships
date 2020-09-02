@@ -11,6 +11,7 @@
         <GameName  v-bind:socket="socket" />
         <MyName v-bind:socket="socket" />
         <OtherName />
+        <Agile v-bind:socket="socket" />
       </div>
       <div class="container">
         <div class="row">
@@ -31,6 +32,7 @@ import AboutView from "./components/about/AboutView.vue";
 import GameName from "./components/GameName.vue";
 import MyName from "./components/MyName.vue";
 import OtherName from "./components/OtherName.vue";
+import Agile from "./components/Agile.vue";
 import Moves from "./components/Moves.vue";
 import Board from "./components/Board.vue";
 
@@ -42,6 +44,7 @@ export default {
     GameName,
     MyName,
     OtherName,
+    Agile,
     Moves,
     Board
   },
