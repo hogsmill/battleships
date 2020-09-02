@@ -31,6 +31,7 @@
         </table>
       </td>
       <td>
+        <h3>Score: {{score()}}/{{totalScore()}}</h3>
         <div v-for="(boat, b) in boats" :key="b" class="place" :class="{selected: selectedBoat.name == boat.name}">
           <button class="btn btn-sm btn-secondary smaller-font horizontal" @click="selectBoat(boat, 'horizontal')" :title="'Place ' + boat.name + ' horizontally'">&#x2192;</button>
           <button class="btn btn-sm btn-secondary smaller-font vertical" @click="selectBoat(boat, 'vertical')" :title="'Place ' + boat.name + ' vertically'">&#x2193;</button>
@@ -66,6 +67,16 @@ export default {
     }
   },
   methods: {
+    totalScore() {
+      var total = 0
+      for (var i = 0; i < this.boats.length; i++) {
+        total = total + this.boats[i].size
+      }
+      return total
+    },
+    score() {
+      return document.getElementsByClassName('hit').length
+    },
     selectBoat(boat, orientation) {
       this.selectedBoat = boat
       this.selectedOrientation = orientation
