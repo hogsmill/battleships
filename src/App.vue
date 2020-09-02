@@ -105,6 +105,13 @@ export default {
         this.$store.dispatch("removePlayer", data)
       }
     })
+
+    this.socket.on("gameOver", (data) => {
+      if (this.gameName == data.gameName) {
+        console.log('gameOver', data)
+        alert('Game Over')
+      }
+    })
   }
 }
 </script>

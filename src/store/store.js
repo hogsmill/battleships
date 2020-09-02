@@ -9,6 +9,8 @@ export const store = new Vuex.Store({
     myName: '',
     theirName: '',
     gameName: '',
+    boats: [],
+    totalScore: 0,
     gameState: []
   },
   getters: {
@@ -23,6 +25,12 @@ export const store = new Vuex.Store({
     },
     getGameName: (state) => {
       return state.gameName;
+    },
+    getBoats: (state) => {
+      return state.boats;
+    },
+    getTotalScore: (state) => {
+      return state.totalScore;
     },
     getGameState: (state) => {
       return state.gameState;
@@ -54,6 +62,8 @@ export const store = new Vuex.Store({
       }
     },
     loadGame: (state, payload) => {
+      state.boats = payload.boats;
+      state.totalScore = payload.totalScore;
       state.gameState = payload.gameState;
     },
     updateGameName: (state, payload) => {

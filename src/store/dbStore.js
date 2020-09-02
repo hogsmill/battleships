@@ -4,7 +4,21 @@ function createNewGame(data) {
   var game = data
   game.gameName = data.gameName
   game.gameState = []
+  game.maxMoves = 40,
+  game.boats = [
+    {name: 'carrier', size: 5},
+    {name: 'battleship', size: 4},
+    {name: 'submarine', size: 3},
+    {name: 'destroyer', size: 3},
+    {name: 'patrol-boat', size: 2}
+  ]
   game.created = new Date().toISOString()
+
+  var total = 0
+  for (var i = 0; i < game.boats.length; i++) {
+    total = total + game.boats[i].size
+  }
+  game.totalScore = total
 
   return game
 }
@@ -32,27 +46,51 @@ function hitOrMiss(data, i, gameState) {
   return hit
 }
 
+function gameOver(game) {
+  return (game.gameState[0].moves.length == game.maxMoves &&
+          game.gameState[1].moves.length == game.maxMoves) ||
+        game.gameState[0].score == game.totalScore ||
+        game.gameState[1].score == game.totalScore
+}
+
+function _loadGame(err, client, db, io, data, debugOn) {
+
+  if (debugOn) { console.log('loadGame', data) }
+
+  db.collection('battleships').findOne({gameName: data.gameName}, function(err, res) {
+    if (err) throw err;
+    if (res) {
+      if (debugOn) { console.log("Loading game '" + data.gameName + "'") }
+      io.emit("loadGame", res)
+      client.close();
+    } else {
+      var game = createNewGame(data)
+      if (debugOn) { console.log("Creating game '" + data.gameName + "'") }
+      db.collection('battleships').insertOne(game, function(err, rec) {
+        if (err) throw err;
+        io.emit("loadGame", game)
+        client.close()
+      })
+    }
+  })
+}
+
 module.exports = {
 
   loadGame: function(err, client, db, io, data, debugOn) {
 
     if (debugOn) { console.log('loadGame', data) }
 
-    db.collection('battleships').findOne({gameName: data.gameName}, function(err, res) {
-      if (err) throw err;
-      if (res) {
-        if (debugOn) { console.log("Loading game '" + data.gameName + "'") }
-        io.emit("loadGame", res)
-        client.close();
-      } else {
-        var game = createNewGame(data)
-        if (debugOn) { console.log("Creating game '" + data.gameName + "'") }
-        db.collection('battleships').insertOne(game, function(err, rec) {
-          if (err) throw err;
-          io.emit("loadGame", game)
-          client.close()
-        })
-      }
+    _loadGame(err, client, db, io, data, debugOn)
+  },
+
+  restartGame: function(err, client, db, io, data, debugOn) {
+
+    if (debugOn) { console.log('restartGame', data) }
+
+    db.collection('battleships').deleteMany({gameName: data.gameName}, function(err, res) {
+      _loadGame(err, client, db, io, data, debugOn)
+      io.emit("restartGame", data)
     })
   },
 
@@ -67,6 +105,7 @@ module.exports = {
         if (!res.gameState.find(function(p) { return p.id == data.player.id })) {
           data.player.board = []
           data.player.moves = []
+          data.player.score = 0
           gameState.push(data.player)
         }
         data.gameState = gameState
@@ -193,9 +232,15 @@ module.exports = {
           player = res.gameState[i]
           if (player.id == data.name.id) {
             var hit = hitOrMiss(data, i, res.gameState)
+            if (hit) {
+              player.score = player.score + 1
+            }
             player.moves.push({row: data.row, column: data.column, hit: hit})
           }
           gameState.push(player)
+        }
+        if (gameOver(res)) {
+          io.emit("gameOver", data)
         }
         data.gameState = gameState
         io.emit("updateGameState", data)

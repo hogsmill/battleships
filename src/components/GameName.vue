@@ -2,6 +2,7 @@
   <div class="game-name" v-if="!showAbout">
       <button class="name btn btn-sm btn-secondary smaller-font" v-if="!gameName" @click="show">Set Game Name</button>
       <span v-if="gameName" @click="show" class="name mr-2 mt-2 pointer p-2 bg-light">Game: {{gameName}}</span>
+      <span v-if="gameName" title="Restart Game" class="restart" @click="restartGame">&#8635;</span>
 
     <modal name="set-game-name" :height="120" :classes="['rounded', 'set-game-name']">
       <div class="mr-2 mt-1">
@@ -40,6 +41,12 @@ export default {
       this.socket.emit("loadGame", {gameName: this.gameName})
       this.hide()
     },
+    restartGame() {
+      var restartGame = confirm("Are you sure you want to re-start this game?")
+      if (restartGame) {
+        this.socket.emit("restartGame", {gameName: this.gameName})
+      }
+    }
   },
   computed: {
     showAbout() {
@@ -56,7 +63,11 @@ export default {
 
 .game-name {
   width: 120px;
-  display: inline-block
+  display: inline-block;
+
+  .restart:hover {
+    cursor: pointer;
+  }
 }
 .set-game-name {
 

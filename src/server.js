@@ -32,6 +32,9 @@ function doDb(fun, data) {
       case 'loadGame':
         dbStore.loadGame(err, client, db, io, data, debugOn)
         break;
+      case 'restartGame':
+        dbStore.restartGame(err, client, db, io, data, debugOn)
+        break;
       case 'addPlayer':
         dbStore.addPlayer(err, client, db, io, data, debugOn)
         break;
@@ -68,6 +71,8 @@ io.on("connection", (socket) => {
   })
 
   socket.on("loadGame", (data) => { doDb('loadGame', data) })
+
+  socket.on("restartGame", (data) => { doDb('restartGame', data) })
 
   socket.on("changeName", (data) => { doDb('changeName', data) })
 
