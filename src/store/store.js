@@ -40,6 +40,9 @@ export const store = new Vuex.Store({
     getGameState: (state) => {
       return state.gameState;
     },
+    gameSet: (state) => {
+      return state.gameState.length == 2 && state.myName
+    },
     getResult: (state) => {
       return state.result;
     }

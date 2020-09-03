@@ -15,6 +15,7 @@ function swapHighlight(r, c, boat, orientation) {
     swap(cells[i], false)
   }
   if (orientation == 'horizontal') {
+    c = placeN(c, boat)
     for (i = c; i < c + boat.size; i++) {
       id = 'c' + r + '-' + i
       element = document.getElementById(id)
@@ -24,6 +25,7 @@ function swapHighlight(r, c, boat, orientation) {
     }
   }
   if (orientation == 'vertical') {
+    r = placeN(r, boat)
     for (i = r; i < r + boat.size; i++) {
       id = 'c' + i + '-' + c
       element = document.getElementById(id)
@@ -32,6 +34,13 @@ function swapHighlight(r, c, boat, orientation) {
       }
     }
   }
+}
+
+function placeN(n, boat) {
+  if (n + boat.size > size) {
+    n = size - boat.size
+  }
+  return n
 }
 
 function notClashing(boat, r, c, orientation, board) {
@@ -73,6 +82,10 @@ var Board = {
     return ok
   },
 
+  placeN: function(n, boat) {
+    return placeN(n, boat)
+  },
+
   cellValue: function(r, c, board) {
     var cellVal = false
     for (var i = 0; i < board.length; i++) {
@@ -86,18 +99,18 @@ var Board = {
     return cellVal
   },
 
-  hitOrMiss: function(r, c, moves, agile) {
+  hitOrMiss: function(r, c, moves, agile, result) {
     var val = ''
     if (moves) {
       for (var i = 0; i < moves.length; i++) {
         if (r == moves[i].row && c == moves[i].column) {
           if (moves[i].hit) {
-            val = 'hit'
+            val = {class: 'hit', boat: moves[i].hit.boat.name.split('')[0]}
           } else {
-            val = 'miss'
+            val = {class: 'miss', boat: ''}
           }
-          if (agile == 'no') {
-            val = 'played'
+          if (agile == 'no' && !result.win) {
+            val = {class: 'played', boat: ''}
           }
         }
       }

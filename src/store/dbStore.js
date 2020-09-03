@@ -3,7 +3,8 @@ function createNewGame(data) {
 
   var game = data
   game.gameName = data.gameName
-  game.gameState = []
+  game.gameState = [],
+  game.result = {},
   game.maxMoves = 40,
   game.boats = [
     {name: 'carrier', size: 5},
@@ -27,11 +28,11 @@ function hitOrMissBoat(r, c, boat) {
   var hit = false
   if (boat.orientation == 'horizontal') {
     if (r == boat.row && c >= boat.column && c < parseInt(boat.column + boat.boat.size)) {
-      hit = true
+      hit = boat
     }
   } else {
     if (c == boat.column && r >= boat.row && r < boat.row + boat.boat.size) {
-      hit = true
+      hit = boat
     }
   }
   return hit

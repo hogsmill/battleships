@@ -14,7 +14,7 @@ export default {
   methods: {
     movesDone() {
       var arr = [], myMove = 0
-      if (this.gameState.length == 2 && this.myName) {
+      if (this.gameSet) {
         myMove = game.myMoves(this.gameState, this.myName).length
       }
       for (var i = 1; i <= myMove; i++) {
@@ -24,7 +24,7 @@ export default {
     },
     movesNotDone() {
       var arr = [], myMove = 0
-      if (this.gameState.length == 2 && this.myName) {
+      if (this.gameSet) {
         myMove = game.myMoves(this.gameState, this.myName).length
       }
       for (var i = myMove + 1; i <= 40; i++) {
@@ -39,6 +39,9 @@ export default {
     },
     maxMoves() {
       return this.$store.getters.getMaxMoves;
+    },
+    gameSet() {
+      return this.$store.getters.gameSet;
     },
     gameState() {
       return this.$store.getters.getGameState;

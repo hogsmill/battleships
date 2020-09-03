@@ -76,21 +76,24 @@ export default {
       this.$modal.hide('game-over');
     },
     getScore() {
-      var score0 = this.gameState[0].score
-      var score1 = this.gameState[1].score
-      var winner, loser, result
+      var result = ''
+      if (this.gemeSet) {
+        var score0 = this.gameState[0].score
+        var score1 = this.gameState[1].score
+        var winner, loser
 
-      if (score0 == score1) {
-        result = 'Draw - ' + this.gameState[0].name + ':' + this.gameState[0].score + ', ' + this.gameState[1].name + ':' + this.gameState[1].score
-      } else {
-        if (score0 > score1) {
-          winner = this.gameState[0]
-          loser = this.gameState[1]
+        if (score0 == score1) {
+          result = 'Draw - ' + this.gameState[0].name + ':' + this.gameState[0].score + ', ' + this.gameState[1].name + ':' + this.gameState[1].score
         } else {
-          winner = this.gameState[1]
-          loser = this.gameState[0]
+          if (score0 > score1) {
+            winner = this.gameState[0]
+            loser = this.gameState[1]
+          } else {
+            winner = this.gameState[1]
+            loser = this.gameState[0]
+          }
+          result = winner.name + ' beats ' + loser.name + ' ' + winner.score + '/' + loser.score
         }
-        result = winner.name + ' beats ' + loser.name + ' ' + winner.score + '/' + loser.score
       }
       return result
     }
@@ -108,11 +111,13 @@ export default {
     gameName() {
       return this.$store.getters.getGameName;
     },
+    gameSet() {
+      return this.$store.getters.gameSet;
+    },
     gameState() {
       return this.$store.getters.getGameState;
     },
     result() {
-      console.log(this.$store.getters.getResult)
       return this.$store.getters.getResult;
     }
   },

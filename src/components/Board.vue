@@ -1,6 +1,6 @@
 <template>
 
-  <table v-if="gameState.length == 2">
+  <table v-if="gameSet">
     <tr>
       <td>
         <h3 :class="{'no-header': !theirName}">{{theirName.name}}'s Board</h3>
@@ -11,7 +11,7 @@
           </tr>
           <tr v-for="(row, r) in rows" :key="r">
             <td class="header">{{row}}</td>
-            <td :class="hitOrMiss(r, c)" v-for="(col, c) in columns" :key="c" :id="rows[r] + columns[c]" @click="makeMove(r, c)"></td>
+            <td :class="hitOrMiss(r, c).class" v-for="(col, c) in columns" :key="c" :id="rows[r] + columns[c]" @click="makeMove(r, c)">{{hitOrMiss(r, c).boat}}</td>
           </tr>
         </table>
       </td>
@@ -33,8 +33,8 @@
       <td>
         <h3>Score: {{score()}}/{{totalScore}}</h3>
         <div v-for="(boat, b) in boats" :key="b" class="place" :class="{selected: selectedBoat.name == boat.name}">
-          <button class="btn btn-sm btn-secondary smaller-font horizontal" @click="selectBoat(boat, 'horizontal')" :title="'Place ' + boat.name + ' horizontally'">&#x2192;</button>
-          <button class="btn btn-sm btn-secondary smaller-font vertical" @click="selectBoat(boat, 'vertical')" :title="'Place ' + boat.name + ' vertically'">&#x2193;</button>
+          <button class="btn btn-sm btn-secondary smaller-font horizontal" @click="selectBoat(boat, 'horizontal')" :disabled="gameStarted()" :title="'Place ' + boat.name + ' horizontally'">&#x2192;</button>
+          <button class="btn btn-sm btn-secondary smaller-font vertical" @click="selectBoat(boat, 'vertical')" :disabled="gameStarted()" :title="'Place ' + boat.name + ' vertically'">&#x2193;</button>
           <div class="boat" :class="boat.name"></div>
         </div>
       </td>
@@ -81,15 +81,24 @@ export default {
       }
     },
     hitOrMiss(r, c) {
-      if (this.gameState.length == 2 && this.myName) {
+      if (this.gameSet) {
         var agile = game.myBoard(this.gameState, this.myName).agile
         var moves = game.myMoves(this.gameState, this.myName)
-        return board.hitOrMiss(r, c, moves, agile)
+        return board.hitOrMiss(r, c, moves, agile, this.result)
       }
+    },
+    gameStarted() {
+      return this.gameState[0].moves.length > 0 || this.gameState[1].moves.length > 0
     },
     place(r, c) {
       var myBoard = game.myBoard(this.gameState, this.myName).board
       if (this.selectedBoat && this.selectedOrientation && board.canPlaceBoat(this.selectedBoat, r, c, this.selectedOrientation, myBoard)) {
+        if (this.selectedOrientation == 'vertical') {
+          r = board.placeN(r, this.selectedBoat)
+        }
+        if (this.selectedOrientation == 'horizontal') {
+          c = board.placeN(c, this.selectedBoat)
+        }
         console.log('Placing ' + this.selectedBoat.name + ' ' + this.selectedOrientation + 'ly at (' + this.rows[r] + ', ' + this.columns[c] + ')')
         this.socket.emit("placeBoat", {gameName: this.gameName, name: this.myName, boat: this.selectedBoat, orientation: this.selectedOrientation, row: r, column: c})
         this.selectedBoat = ''
@@ -97,7 +106,7 @@ export default {
       }
     },
     cellBoat(r, c) {
-      if (this.gameState.length == 2 && this.myName) {
+      if (this.gameSet) {
         var myBoard = game.myBoard(this.gameState, this.myName).board
         var val = board.cellValue(r, c, myBoard)
         if (val) {
@@ -126,6 +135,12 @@ export default {
     },
     maxMoves() {
       return this.$store.getters.getMaxMoves;
+    },
+    result() {
+      return this.$store.getters.getResult;
+    },
+    gameSet() {
+      return this.$store.getters.gameSet;
     },
     gameState() {
       return this.$store.getters.getGameState;
