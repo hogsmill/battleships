@@ -11,7 +11,9 @@ export const store = new Vuex.Store({
     gameName: '',
     boats: [],
     totalScore: 0,
-    gameState: []
+    maxMoves: 40,
+    gameState: [],
+    result: {}
   },
   getters: {
     getShowAbout: (state) => {
@@ -29,11 +31,17 @@ export const store = new Vuex.Store({
     getBoats: (state) => {
       return state.boats;
     },
+    getMaxMoves: (state) => {
+      return state.maxMoves;
+    },
     getTotalScore: (state) => {
       return state.totalScore;
     },
     getGameState: (state) => {
       return state.gameState;
+    },
+    getResult: (state) => {
+      return state.result;
     }
   },
   mutations: {
@@ -68,6 +76,9 @@ export const store = new Vuex.Store({
     },
     updateGameName: (state, payload) => {
       state.gameName = payload;
+    },
+    gameOver: (state, payload) => {
+      state.result = payload.result;
     }
   },
   actions: {
@@ -88,6 +99,9 @@ export const store = new Vuex.Store({
     },
     updateGameName: ({ commit }, payload) => {
       commit("updateGameName", payload);
+    },
+    gameOver: ({ commit }, payload) => {
+      commit("gameOver", payload);
     }
   }
 });

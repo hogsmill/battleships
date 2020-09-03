@@ -47,10 +47,17 @@ function hitOrMiss(data, i, gameState) {
 }
 
 function gameOver(game) {
-  return (game.gameState[0].moves.length == game.maxMoves &&
-          game.gameState[1].moves.length == game.maxMoves) ||
-        game.gameState[0].score == game.totalScore ||
-        game.gameState[1].score == game.totalScore
+  var over = {win: false}
+  if (game.gameState[0].moves.length >= game.maxMoves && game.gameState[1].moves.length >= game.maxMoves) {
+    over = {win: true, allMovesDone: true}
+  }
+  if (game.gameState[0].score == game.totalScore) {
+    over = {win: true, player: 0}
+  }
+  if (game.gameState[1].score == game.totalScore) {
+    over = {win: true, player: 1}
+  }
+  return over
 }
 
 function _loadGame(err, client, db, io, data, debugOn) {
@@ -239,7 +246,8 @@ module.exports = {
           }
           gameState.push(player)
         }
-        if (gameOver(res)) {
+        data.result = gameOver(res)
+        if (data.result.win) {
           io.emit("gameOver", data)
         }
         data.gameState = gameState

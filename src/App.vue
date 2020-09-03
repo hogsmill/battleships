@@ -20,6 +20,26 @@
         </div>
       </div>
     </div>
+
+    <modal name="game-over" :height="150" :classes="['rounded', 'game-over']">
+      <div class="mr-2 mt-1">
+        <button type="button" class="close" @click="hide" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="mt-4">
+        <h4>
+          Game Over:
+          <span v-if="result.allMovesDone">{{getScore()}}</span>
+          <span v-if="result.player == 0">{{getScore()}}</span>
+          <span v-if="result.player == 1">{{getScore()}}</span>
+        </h4>
+        <div>
+          <button class="btn btn-sm btn-secondary smaller-font" @click="hide">OK</button>
+        </div>
+      </div>
+    </modal>
+
   </div>
 </template>
 
@@ -48,6 +68,33 @@ export default {
     Moves,
     Board
   },
+  methods: {
+    show () {
+      this.$modal.show('game-over');
+    },
+    hide () {
+      this.$modal.hide('game-over');
+    },
+    getScore() {
+      var score0 = this.gameState[0].score
+      var score1 = this.gameState[1].score
+      var winner, loser, result
+
+      if (score0 == score1) {
+        result = 'Draw - ' + this.gameState[0].name + ':' + this.gameState[0].score + ', ' + this.gameState[1].name + ':' + this.gameState[1].score
+      } else {
+        if (score0 > score1) {
+          winner = this.gameState[0]
+          loser = this.gameState[1]
+        } else {
+          winner = this.gameState[1]
+          loser = this.gameState[0]
+        }
+        result = winner.name + ' beats ' + loser.name + ' ' + winner.score + '/' + loser.score
+      }
+      return result
+    }
+  },
   computed: {
     showAbout() {
       return this.$store.getters.getShowAbout;
@@ -60,9 +107,17 @@ export default {
     },
     gameName() {
       return this.$store.getters.getGameName;
+    },
+    gameState() {
+      return this.$store.getters.getGameState;
+    },
+    result() {
+      console.log(this.$store.getters.getResult)
+      return this.$store.getters.getResult;
     }
   },
   created() {
+    var self = this
     var host = "77.68.122.69"
     if (location.hostname == 'localhost') {
       host = 'localhost'
@@ -108,8 +163,8 @@ export default {
 
     this.socket.on("gameOver", (data) => {
       if (this.gameName == data.gameName) {
-        console.log('gameOver', data)
-        alert('Game Over')
+        this.$store.dispatch("gameOver", data)
+        self.show()
       }
     })
   }

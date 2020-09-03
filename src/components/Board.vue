@@ -73,7 +73,12 @@ export default {
       }
     },
     makeMove(r, c) {
-      this.socket.emit("makeMove", {gameName: this.gameName, name: this.myName, row: r, column: c})
+      var moves = game.myBoard(this.gameState, this.myName).moves.length
+      if (moves >= this.maxMoves) {
+        alert('You have no more moves')
+      } else {
+        this.socket.emit("makeMove", {gameName: this.gameName, name: this.myName, row: r, column: c})
+      }
     },
     hitOrMiss(r, c) {
       if (this.gameState.length && this.myName) {
@@ -118,6 +123,9 @@ export default {
     },
     totalScore() {
       return this.$store.getters.getTotalScore;
+    },
+    maxMoves() {
+      return this.$store.getters.getMaxMoves;
     },
     gameState() {
       return this.$store.getters.getGameState;
