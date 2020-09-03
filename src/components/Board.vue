@@ -1,6 +1,6 @@
 <template>
 
-  <table>
+  <table v-if="gameState.length == 2">
     <tr>
       <td>
         <h3 :class="{'no-header': !theirName}">{{theirName.name}}'s Board</h3>
@@ -81,7 +81,7 @@ export default {
       }
     },
     hitOrMiss(r, c) {
-      if (this.gameState.length && this.myName) {
+      if (this.gameState.length == 2 && this.myName) {
         var agile = game.myBoard(this.gameState, this.myName).agile
         var moves = game.myMoves(this.gameState, this.myName)
         return board.hitOrMiss(r, c, moves, agile)
@@ -97,7 +97,7 @@ export default {
       }
     },
     cellBoat(r, c) {
-      if (this.gameState.length && this.myName) {
+      if (this.gameState.length == 2 && this.myName) {
         var myBoard = game.myBoard(this.gameState, this.myName).board
         var val = board.cellValue(r, c, myBoard)
         if (val) {

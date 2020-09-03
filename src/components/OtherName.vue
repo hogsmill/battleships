@@ -1,6 +1,6 @@
 <template>
   <div class="other-name" v-if="!showAbout">
-    <span v-if="theirName" class="mr-2 mt-2 pointer p-2 bg-light">I am playing: {{theirName.name}}</span>
+    <span v-if="gameState.length == 2" class="mr-2 mt-2 pointer p-2 bg-light">I am playing: {{theirName.name}}</span>
   </div>
 </template>
 
@@ -15,6 +15,9 @@ export default {
     },
     gameName() {
       return this.$store.getters.getGameName
+    },
+    gameState() {
+      return this.$store.getters.getGameState
     },
     theirName() {
       return this.$store.getters.getTheirName

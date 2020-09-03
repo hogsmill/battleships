@@ -97,7 +97,6 @@ module.exports = {
 
     db.collection('battleships').deleteMany({gameName: data.gameName}, function(err, res) {
       _loadGame(err, client, db, io, data, debugOn)
-      io.emit("restartGame", data)
     })
   },
 
