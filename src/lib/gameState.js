@@ -11,5 +11,9 @@ module.exports = {
 
   myMoves: function(gameState, name) {
     return gameState[0].id == name.id ? gameState[0].moves : gameState[1].moves
+  },
+
+  theirMoves: function(gameState, name) {
+    return gameState[0].id != name.id ? gameState[0].moves : gameState[1].moves
   }
 }

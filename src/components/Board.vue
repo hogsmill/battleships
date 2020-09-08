@@ -11,7 +11,7 @@
           </tr>
           <tr v-for="(row, r) in rows" :key="r">
             <td class="header">{{row}}</td>
-            <td :class="hitOrMiss(r, c).class" v-for="(col, c) in columns" :key="c" :id="rows[r] + columns[c]" @click="makeMove(r, c)">{{hitOrMiss(r, c).boat}}</td>
+            <td :class="hitOrMissThem(r, c).class" v-for="(col, c) in columns" :key="c" :id="rows[r] + columns[c]" @click="makeMove(r, c)">{{hitOrMissThem(r, c).boat}}</td>
           </tr>
         </table>
       </td>
@@ -24,7 +24,7 @@
           </tr>
           <tr v-for="(row, r) in rows" :key="r">
             <td class="header">{{row}}</td>
-            <td class="board-cell" :class="{'selected': cellBoat(r, c) != ''}" v-for="(col, c) in columns" :key="c" :id="'c' + r + '-' + c" @click="place(r, c)" @mouseover="highlight(r, c)">
+            <td class="board-cell" :class="myCellClass(r, c)" v-for="(col, c) in columns" :key="c" :id="'c' + r + '-' + c" @click="place(r, c)" @mouseover="highlight(r, c)">
               {{cellBoat(r, c)}}
             </td>
           </tr>
@@ -80,11 +80,27 @@ export default {
         this.socket.emit("makeMove", {gameName: this.gameName, name: this.myName, row: r, column: c})
       }
     },
-    hitOrMiss(r, c) {
+    myCellClass(r, c) {
+      var hit = this.hitOrMissMe(r, c)
+      if (hit && hit.class == 'hit') {
+        return 'hit'
+      } else if (this.cellBoat(r, c) != '') {
+        return 'selected'
+      } else {
+        return ''
+      }
+    },
+    hitOrMissThem(r, c) {
       if (this.gameSet) {
         var agile = game.myBoard(this.gameState, this.myName).agile
         var moves = game.myMoves(this.gameState, this.myName)
         return board.hitOrMiss(r, c, moves, agile, this.result)
+      }
+    },
+    hitOrMissMe(r, c) {
+      if (this.gameSet) {
+        var moves = game.theirMoves(this.gameState, this.myName)
+        return board.hitOrMiss(r, c, moves, false, this.result)
       }
     },
     gameStarted() {
@@ -183,11 +199,11 @@ export default {
       }
 
       &.hit {
-        background-color: green;
+        background-color: red;
       }
 
       &.miss {
-        background-color: red;
+        background-color: #ccc;
       }
 
       &.played {
