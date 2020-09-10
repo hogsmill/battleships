@@ -53,7 +53,6 @@ function clash(r1, c1, orientation1, size1, r2, c2, orientation2, size2) {
   var c2end = parseInt(c2 + size2)
   var r1end = parseInt(r1 + size1)
   var r2end = parseInt(r2 + size2)
-  console.log(orientation1, orientation2)
   if (orientation1 == 'horizontal' && orientation2 == 'horizontal') {
     clashing = r1 == r2 && (nBetween(c2, c1, c1end) || nBetween(c2end, c1, c1end))
   } else if (orientation1 == 'horizontal' && orientation2 == 'vertical') {
