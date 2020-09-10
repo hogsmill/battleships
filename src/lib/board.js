@@ -43,9 +43,37 @@ function placeN(n, boat) {
   return n
 }
 
+function nBetween(n, _start, _end) {
+  return n >= _start && n <= _end
+}
+
+function clash(r1, c1, orientation1, size1, r2, c2, orientation2, size2) {
+  var clashing = false
+  var c1end = parseInt(c1 + size1)
+  var c2end = parseInt(c2 + size2)
+  var r1end = parseInt(r1 + size1)
+  var r2end = parseInt(r2 + size2)
+  console.log(orientation1, orientation2)
+  if (orientation1 == 'horizontal' && orientation2 == 'horizontal') {
+    clashing = r1 == r2 && (nBetween(c2, c1, c1end) || nBetween(c2end, c1, c1end))
+  } else if (orientation1 == 'horizontal' && orientation2 == 'vertical') {
+    clashing = nBetween(r1, r2, r2end - 1) && nBetween(c2, c1, c1end)
+  } else if (orientation1 == 'vertical' && orientation2 == 'horizontal') {
+    clashing = nBetween(r2, r1, r1end) && nBetween(c1, c2, c2end - 1)
+  } else if (orientation1 == 'vertical' && orientation2 == 'vertical') {
+    clashing = c1 == c2 && (nBetween(r2, r1, r1end) || nBetween(r2end, r1, r1end))
+  }
+  return clashing
+}
+
 function notClashing(boat, r, c, orientation, board) {
-  console.log('clashing', boat, r, c, orientation, board)
-  return true
+  var clashing = false
+  for (var i = 0; i < board.length; i++) {
+    if (clash(r, c, orientation, boat.size, board[i].row, board[i].column, board[i].orientation, board[i].boat.size)) {
+      clashing = true
+    }
+  }
+  return !clashing
 }
 
 var Board = {
