@@ -7,6 +7,9 @@
     </div>
     <div v-if="!showAbout" class="main">
       <h1>Agile Battleships</h1>
+      <div v-if="isHost" class="connections">
+        Current server connections: {{ connections.connections }} / {{ connections.maxConnections }}
+      </div>
       <div class="names">
         <GameName  v-bind:socket="socket" />
         <MyName v-bind:socket="socket" />
@@ -45,6 +48,8 @@
 
 <script>
 import io from "socket.io-client";
+
+import params from './lib/params.js'
 
 import Header from "./components/Header.vue";
 import AboutView from "./components/about/AboutView.vue";
@@ -99,6 +104,9 @@ export default {
     }
   },
   computed: {
+    isHost() {
+      return this.$store.getters.getHost
+    },
     showAbout() {
       return this.$store.getters.getShowAbout;
     },
@@ -119,6 +127,9 @@ export default {
     },
     result() {
       return this.$store.getters.getResult;
+    },
+    connections() {
+      return this.$store.getters.getConnections;
     }
   },
   created() {
@@ -130,6 +141,10 @@ export default {
     var connStr = "http://" + host + ":3008"
     console.log("Connecting to: " + connStr)
     this.socket = io(connStr)
+
+    if (params.isParam('host')) {
+      this.$store.dispatch('updateHost', true)
+    }
 
     var myName = localStorage.getItem("myName-bs")
     if (myName) {
@@ -155,7 +170,6 @@ export default {
 
     this.socket.on("updateGameState", (data) => {
       if (this.gameName == data.gameName) {
-        console.log('updateGameState', data)
         this.$store.dispatch("updateGameState", data)
       }
     })
@@ -172,11 +186,21 @@ export default {
         self.show()
       }
     })
+
+    this.socket.on('updateConnections', (data) => {
+      this.$store.dispatch('updateConnections', data)
+    })
   }
 }
 </script>
 
 <style lang="scss">
+
+  .connections {
+    text-align: right;
+    padding-right: 6px;
+    margin-bottom: 12px;
+  }
 
   .main {
     position: relative;

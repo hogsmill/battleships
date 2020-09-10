@@ -14,7 +14,7 @@ var connectDebugOff = prod
 var debugOn = !prod
 
 var connections = 0
-var maxConnections = 10
+var maxConnections = 2500
 
 function emit(event, data) {
   if (debugOn) {
@@ -63,11 +63,13 @@ io.on("connection", (socket) => {
     socket.disconnect(0)
   } else {
     connectDebugOff || console.log(`A user connected with socket id ${socket.id}. (${connections} connections)`)
+    emit('updateConnections', {connections: connections, maxConnections: maxConnections})
   }
 
   socket.on("disconnect", () => {
     connections = connections - 1
     connectDebugOff || console.log(`User with socket id ${socket.id} has disconnected. (${connections} connections)`)
+    emit('updateConnections', {connections: connections, maxConnections: maxConnections})
   })
 
   socket.on("loadGame", (data) => { doDb('loadGame', data) })

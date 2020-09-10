@@ -5,6 +5,7 @@ Vue.use(Vuex);
 
 export const store = new Vuex.Store({
   state: {
+    connections: 0,
     showAbout: false,
     myName: '',
     theirName: '',
@@ -16,6 +17,9 @@ export const store = new Vuex.Store({
     result: {}
   },
   getters: {
+    getHost: (state) => {
+      return state.host
+    },
     getShowAbout: (state) => {
       return state.showAbout;
     },
@@ -45,9 +49,15 @@ export const store = new Vuex.Store({
     },
     getResult: (state) => {
       return state.result;
+    },
+    getConnections: (state) => {
+      return state.connections;
     }
   },
   mutations: {
+    updateHost: (state, payload) => {
+      state.host = payload
+    },
     updateShowAbout: (state, payload) => {
       state.showAbout = payload;
     },
@@ -82,9 +92,15 @@ export const store = new Vuex.Store({
     },
     gameOver: (state, payload) => {
       state.result = payload.result;
+    },
+    updateConnections: (state, payload) => {
+      state.connections = payload
     }
   },
   actions: {
+    updateHost: ({ commit }, payload) => {
+      commit('updateHost', payload)
+    },
     updateShowAbout: ({ commit }, payload) => {
       commit("updateShowAbout", payload);
     },
@@ -105,6 +121,9 @@ export const store = new Vuex.Store({
     },
     gameOver: ({ commit }, payload) => {
       commit("gameOver", payload);
+    },
+    updateConnections: ({ commit }, payload) => {
+      commit('updateConnections', payload)
     }
   }
 });

@@ -1,8 +1,7 @@
 <template>
 
   <div class="moves">
-    <div v-for="(move, d) in movesDone()" :key="'done-' + d" class="move done rounded-circle">{{move}}</div>
-    <div v-for="(move, n) in movesNotDone()" :key="'not-done-' + n" class="move rounded-circle">{{move}}</div>
+    <div v-if="movesDone() > 0" class="moves-done" :style="{'width': getMoves()}">{{ movesDone() }}</div>
   </div>
 
 </template>
@@ -12,25 +11,15 @@ import game from '../lib/gameState.js'
 
 export default {
   methods: {
-    movesDone() {
-      var arr = [], myMove = 0
-      if (this.gameSet) {
-        myMove = game.myMoves(this.gameState, this.myName).length
-      }
-      for (var i = 1; i <= myMove; i++) {
-        arr.push(i)
-      }
-      return arr
+    getMoves() {
+      return this.movesDone() / 40 * 100 + '%'
     },
-    movesNotDone() {
-      var arr = [], myMove = 0
+    movesDone() {
+      var moves = 0
       if (this.gameSet) {
-        myMove = game.myMoves(this.gameState, this.myName).length
+        moves = game.myMoves(this.gameState, this.myName).length
       }
-      for (var i = myMove + 1; i <= 40; i++) {
-        arr.push(i)
-      }
-      return arr
+      return moves
     }
   },
   computed: {
@@ -55,19 +44,15 @@ export default {
   .moves {
     width: 100%;
     text-align: center;
+    border: 1px solid #ccc;
+    height: 24px;
 
-    .move {
+    .moves-done {
+      background-color: #86c6ea;
       height: 24px;
-      width: 24px;
-      border: 1px solid;
-      margin: 1px;
-      display: inline-block;
-
-      &.done {
-        background-color: green;
-        border-color: green;
-        color: #fff;
-      }
+      color: #fff;
+      text-align: right;
+      padding-right: 4px;
     }
   }
 </style>
