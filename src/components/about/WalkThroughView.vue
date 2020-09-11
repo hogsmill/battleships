@@ -125,7 +125,7 @@ export default {
       this.step = this.step + 1
       var elem = document.getElementsByClassName("vm--modal")[0]
       var target, positions = {}
-      if (this.positions[this.step].target) {
+      if (this.positions[this.step] && this.positions[this.step].target) {
         target = document.getElementById(this.positions[this.step].target)
         target = target.getBoundingClientRect()
         positions.left = target.left + 30
