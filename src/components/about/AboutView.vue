@@ -1,7 +1,8 @@
 <template>
-  <div class="container">
+  <div class="container about">
     <h1>Agile Battleships</h1>
-    <p>Th very simple game demonstrates why early and frequent feedback leads to
+    <div class="rounded">
+    <p>This very simple game demonstrates why early and frequent feedback leads to
       success; in battleships, or software development...</p>
     <p>Everyone is familiar with this game - you simply place your ships on your board, and
       your opponent places his. You then have 40 shots to destroy your opponents fleet. Yoi
@@ -12,5 +13,15 @@
       other plays "non-agile", and doesn't get the feedback until the end of the game. The "agile"
       player should win easily every time as getting feedback after every move allows them to
       inspect and potentially adapt their plan every move.</p>
+    </div>
   </div>
 </template>
+
+<style>
+
+  .about div {
+    background-color: #fff;
+    padding: 12px;
+  }
+
+</style>

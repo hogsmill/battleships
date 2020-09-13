@@ -198,6 +198,16 @@ export default {
 
 <style lang="scss">
 
+  body {
+    background-image: url("./assets/img/sea.jpg");
+    background-size: cover;
+    background-repeat: no-repeat;
+    min-height: 700px;
+  }
+
+  h1, h3 {
+    color: #fff;
+  }
   .connections {
     text-align: right;
     padding-right: 6px;

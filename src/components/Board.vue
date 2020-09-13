@@ -11,7 +11,7 @@
           </tr>
           <tr v-for="(row, r) in rows" :key="r">
             <td class="header">{{row}}</td>
-            <td :class="hitOrMissThem(r, c).class" v-for="(col, c) in columns" :key="c" :id="rows[r] + columns[c]" @click="makeMove(r, c)">{{hitOrMissThem(r, c).boat}}</td>
+            <td :class="hitOrMissThem(r, c).class" class="their-board-cell" v-for="(col, c) in columns" :key="c" :id="rows[r] + columns[c]" @click="makeMove(r, c)">{{hitOrMissThem(r, c).boat}}</td>
           </tr>
         </table>
       </td>
@@ -168,14 +168,18 @@ export default {
 <style lang="scss">
 
   $cell-size: 50px;
-  $header-color: #86c6ea;
+  $header-color: cadetblue;
 
   .no-header {
     color: #fff;
   }
 
   table.board {
-    margin: 0 auto;
+    margin-right: 12px;
+
+    .board-cell, .their-board-cell {
+      background-color: #fff;
+    }
 
     .highlighted {
       background-color: red;
@@ -215,6 +219,7 @@ export default {
   .place {
     position: relative;
     border: 2px solid #fff;
+    background-color: #fff;
 
     &.selected {
       border-color: red;

@@ -1,7 +1,7 @@
 <template>
   <div class="my-name" v-if="!showAbout">
     <button class="btn btn-sm btn-secondary smaller-font" v-if="!myName" @click="show">Set My Name</button>
-    <span v-if="myName" @click="show" class="mr-2 mt-2 pointer p-2 bg-light">I am: {{myName.name}}</span>
+    <span v-if="myName" @click="show" class="rounded mr-2 mt-2 pointer p-2 bg-light">I am: {{myName.name}}</span>
     <span class="cross" title="leave this game" @click="leaveGame()">&#10006;</span>
 
     <modal name="set-my-name" :height="120" :classes="['rounded', 'set-my-name']">

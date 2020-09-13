@@ -1,7 +1,7 @@
 <template>
   <div class="game-name" v-if="!showAbout">
       <button class="name btn btn-sm btn-secondary smaller-font" v-if="!gameName" @click="show">Set Game Name</button>
-      <span v-if="gameName" @click="show" class="name mr-2 mt-2 pointer p-2 bg-light">Game: {{gameName}}</span>
+      <span v-if="gameName" @click="show" class="rounded name mr-2 mt-2 pointer p-2 bg-light">Game: {{gameName}}</span>
       <span v-if="gameName" title="Restart Game" class="restart" @click="restartGame">&#8635;</span>
 
     <modal name="set-game-name" :height="120" :classes="['rounded', 'set-game-name']">

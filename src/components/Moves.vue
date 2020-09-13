@@ -46,9 +46,10 @@ export default {
     text-align: center;
     border: 1px solid #ccc;
     height: 24px;
+    background-color: #ddd;
 
     .moves-done {
-      background-color: #86c6ea;
+      background-color: cadetblue;
       height: 24px;
       color: #fff;
       text-align: right;

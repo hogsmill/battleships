@@ -2,8 +2,8 @@
 
   <div class="who-is-agile">
     <button class="btn btn-sm btn-secondary smaller-font" :disabled="gameState.length < 2" v-if="!agileSet()" @click="setAgile()">Who is Agile?</button>
-    <span v-if="iAmAgile()" class="mr-2 mt-2 pointer p-2 bg-light">I am Agile</span>
-    <span v-if="iAmNotAgile()" class="mr-2 mt-2 pointer p-2 bg-light">I am not Agile</span>
+    <span v-if="iAmAgile()" class="rounded mr-2 mt-2 pointer p-2 bg-light">I am Agile</span>
+    <span v-if="iAmNotAgile()" class="rounded mr-2 mt-2 pointer p-2 bg-light">I am not Agile</span>
   </div>
 
 </template>
