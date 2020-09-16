@@ -1,7 +1,7 @@
-import Vue from "vue";
-import Vuex from "vuex";
+import Vue from 'vue'
+import Vuex from 'vuex'
 
-Vue.use(Vuex);
+Vue.use(Vuex)
 
 export const store = new Vuex.Store({
   state: {
@@ -22,40 +22,40 @@ export const store = new Vuex.Store({
       return state.host
     },
     getShowAbout: (state) => {
-      return state.showAbout;
+      return state.showAbout
     },
     getWalkThrough: (state) => {
-      return state.walkThrough;
+      return state.walkThrough
     },
     getMyName: (state) => {
-      return state.myName;
+      return state.myName
     },
     getTheirName: (state) => {
-      return state.theirName;
+      return state.theirName
     },
     getGameName: (state) => {
-      return state.gameName;
+      return state.gameName
     },
     getBoats: (state) => {
-      return state.boats;
+      return state.boats
     },
     getMaxMoves: (state) => {
-      return state.maxMoves;
+      return state.maxMoves
     },
     getTotalScore: (state) => {
-      return state.totalScore;
+      return state.totalScore
     },
     getGameState: (state) => {
-      return state.gameState;
+      return state.gameState
     },
     gameSet: (state) => {
       return state.gameState.length == 2 && state.myName
     },
     getResult: (state) => {
-      return state.result;
+      return state.result
     },
     getConnections: (state) => {
-      return state.connections;
+      return state.connections
     }
   },
   mutations: {
@@ -63,17 +63,17 @@ export const store = new Vuex.Store({
       state.host = payload
     },
     updateShowAbout: (state, payload) => {
-      state.showAbout = payload;
+      state.showAbout = payload
     },
     updateWalkThrough: (state, payload) => {
-      state.walkThrough = payload;
+      state.walkThrough = payload
     },
     setMyName: (state, payload) => {
-      state.myName = payload;
+      state.myName = payload
     },
     updateGameState: (state, payload) => {
-      state.gameState = payload.gameState;
-      var i = 0;
+      state.gameState = payload.gameState
+      let i = 0
       while (i < state.gameState.length) {
         if (state.gameState[i].id != state.myName.id) {
           state.theirName = state.gameState[i]
@@ -90,15 +90,15 @@ export const store = new Vuex.Store({
       }
     },
     loadGame: (state, payload) => {
-      state.boats = payload.boats;
-      state.totalScore = payload.totalScore;
-      state.gameState = payload.gameState;
+      state.boats = payload.boats
+      state.totalScore = payload.totalScore
+      state.gameState = payload.gameState
     },
     updateGameName: (state, payload) => {
-      state.gameName = payload;
+      state.gameName = payload
     },
     gameOver: (state, payload) => {
-      state.result = payload.result;
+      state.result = payload.result
     },
     updateConnections: (state, payload) => {
       state.connections = payload
@@ -109,31 +109,31 @@ export const store = new Vuex.Store({
       commit('updateHost', payload)
     },
     updateShowAbout: ({ commit }, payload) => {
-      commit("updateShowAbout", payload);
+      commit('updateShowAbout', payload)
     },
     updateWalkThrough: ({ commit }, payload) => {
-      commit("updateWalkThrough", payload);
+      commit('updateWalkThrough', payload)
     },
     setMyName: ({ commit }, payload) => {
-      commit("setMyName", payload);
+      commit('setMyName', payload)
     },
     updateGameState: ({ commit }, payload) => {
-      commit("updateGameState", payload);
+      commit('updateGameState', payload)
     },
     removePlayer: ({ commit }, payload) => {
-      commit("removePlayer", payload);
+      commit('removePlayer', payload)
     },
     loadGame: ({ commit }, payload) => {
-      commit("loadGame", payload);
+      commit('loadGame', payload)
     },
     updateGameName: ({ commit }, payload) => {
-      commit("updateGameName", payload);
+      commit('updateGameName', payload)
     },
     gameOver: ({ commit }, payload) => {
-      commit("gameOver", payload);
+      commit('gameOver', payload)
     },
     updateConnections: ({ commit }, payload) => {
       commit('updateConnections', payload)
     }
   }
-});
+})

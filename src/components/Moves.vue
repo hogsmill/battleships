@@ -1,39 +1,39 @@
 <template>
-
   <div class="moves">
-    <div v-if="movesDone() > 0" class="moves-done" :style="{'width': getMoves()}">{{ movesDone() }}</div>
+    <div v-if="movesDone() > 0" class="moves-done" :style="{'width': getMoves()}">
+      {{ movesDone() }}
+    </div>
   </div>
-
 </template>
 
 <script>
 import game from '../lib/gameState.js'
 
 export default {
+  computed: {
+    myName() {
+      return this.$store.getters.getMyName
+    },
+    maxMoves() {
+      return this.$store.getters.getMaxMoves
+    },
+    gameSet() {
+      return this.$store.getters.gameSet
+    },
+    gameState() {
+      return this.$store.getters.getGameState
+    }
+  },
   methods: {
     getMoves() {
       return this.movesDone() / 40 * 100 + '%'
     },
     movesDone() {
-      var moves = 0
+      let moves = 0
       if (this.gameSet) {
         moves = game.myMoves(this.gameState, this.myName).length
       }
       return moves
-    }
-  },
-  computed: {
-    myName() {
-      return this.$store.getters.getMyName;
-    },
-    maxMoves() {
-      return this.$store.getters.getMaxMoves;
-    },
-    gameSet() {
-      return this.$store.getters.gameSet;
-    },
-    gameState() {
-      return this.$store.getters.getGameState;
     }
   }
 }

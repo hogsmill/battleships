@@ -1,17 +1,24 @@
 <template>
-
   <table v-if="gameSet">
     <tr>
       <td>
-        <h3 :class="{'no-header': !theirName}">{{theirName.name}}'s Board</h3>
+        <h3 :class="{'no-header': !theirName}">
+          {{ theirName.name }}'s Board
+        </h3>
         <table class="board their-board">
           <tr>
-           <td class="header"></td>
-           <td class="header" v-for="(column, col) in columns" :key="col">{{column}}</td>
+            <td class="header" />
+            <td class="header" v-for="(column, col) in columns" :key="col">
+              {{ column }}
+            </td>
           </tr>
           <tr v-for="(row, r) in rows" :key="r">
-            <td class="header">{{row}}</td>
-            <td :class="hitOrMissThem(r, c).class" class="their-board-cell" v-for="(col, c) in columns" :key="c" :id="rows[r] + columns[c]" @click="makeMove(r, c)">{{hitOrMissThem(r, c).boat}}</td>
+            <td class="header">
+              {{ row }}
+            </td>
+            <td :class="hitOrMissThem(r, c).class" class="their-board-cell" v-for="(col, c) in columns" :key="c" :id="rows[r] + columns[c]" @click="makeMove(r, c)">
+              {{ hitOrMissThem(r, c).boat }}
+            </td>
           </tr>
         </table>
       </td>
@@ -19,28 +26,35 @@
         <h3>My Board</h3>
         <table class="board my-board">
           <tr>
-           <td class="header"></td>
-           <td class="header" v-for="(column, col) in columns" :key="col">{{column}}</td>
+            <td class="header" />
+            <td class="header" v-for="(column, col) in columns" :key="col">
+              {{ column }}
+            </td>
           </tr>
           <tr v-for="(row, r) in rows" :key="r">
-            <td class="header">{{row}}</td>
+            <td class="header">
+              {{ row }}
+            </td>
             <td class="board-cell" :class="myCellClass(r, c)" v-for="(col, c) in columns" :key="c" :id="'c' + r + '-' + c" @click="place(r, c)" @mouseover="highlight(r, c)">
-              {{cellBoat(r, c)}}
+              {{ cellBoat(r, c) }}
             </td>
           </tr>
         </table>
       </td>
       <td>
-        <h3>Score: {{score()}}/{{totalScore}}</h3>
+        <h3>Score: {{ score() }}/{{ totalScore }}</h3>
         <div v-for="(boat, b) in boats" :key="b" class="place" :class="{selected: selectedBoat.name == boat.name}">
-          <button class="btn btn-sm btn-secondary smaller-font horizontal" @click="selectBoat(boat, 'horizontal')" :disabled="gameStarted()" :title="'Place ' + boat.name + ' horizontally'">&#x2192;</button>
-          <button class="btn btn-sm btn-secondary smaller-font vertical" @click="selectBoat(boat, 'vertical')" :disabled="gameStarted()" :title="'Place ' + boat.name + ' vertically'">&#x2193;</button>
-          <div class="boat" :class="boat.name"></div>
+          <button class="btn btn-sm btn-secondary smaller-font horizontal" @click="selectBoat(boat, 'horizontal')" :disabled="gameStarted()" :title="'Place ' + boat.name + ' horizontally'">
+            &#x2192;
+          </button>
+          <button class="btn btn-sm btn-secondary smaller-font vertical" @click="selectBoat(boat, 'vertical')" :disabled="gameStarted()" :title="'Place ' + boat.name + ' vertically'">
+            &#x2193;
+          </button>
+          <div class="boat" :class="boat.name" />
         </div>
       </td>
     </tr>
   </table>
-
 </template>
 
 <script>
@@ -59,6 +73,35 @@ export default {
       selectedBoat: ''
     }
   },
+  computed: {
+    myName() {
+      return this.$store.getters.getMyName
+    },
+    theirName() {
+      return this.$store.getters.getTheirName
+    },
+    gameName() {
+      return this.$store.getters.getGameName
+    },
+    boats() {
+      return this.$store.getters.getBoats
+    },
+    totalScore() {
+      return this.$store.getters.getTotalScore
+    },
+    maxMoves() {
+      return this.$store.getters.getMaxMoves
+    },
+    result() {
+      return this.$store.getters.getResult
+    },
+    gameSet() {
+      return this.$store.getters.gameSet
+    },
+    gameState() {
+      return this.$store.getters.getGameState
+    }
+  },
   methods: {
     score() {
       return document.getElementsByClassName('hit').length
@@ -73,15 +116,15 @@ export default {
       }
     },
     makeMove(r, c) {
-      var moves = game.myBoard(this.gameState, this.myName).moves.length
+      const moves = game.myBoard(this.gameState, this.myName).moves.length
       if (moves >= this.maxMoves) {
         alert('You have no more moves')
       } else {
-        this.socket.emit("makeMove", {gameName: this.gameName, name: this.myName, row: r, column: c})
+        this.socket.emit('makeMove', {gameName: this.gameName, name: this.myName, row: r, column: c})
       }
     },
     myCellClass(r, c) {
-      var hit = this.hitOrMissMe(r, c)
+      const hit = this.hitOrMissMe(r, c)
       if (hit && hit.class == 'hit') {
         return 'hit'
       } else if (this.cellBoat(r, c) != '') {
@@ -92,14 +135,14 @@ export default {
     },
     hitOrMissThem(r, c) {
       if (this.gameSet) {
-        var agile = game.myBoard(this.gameState, this.myName).agile
-        var moves = game.myMoves(this.gameState, this.myName)
+        const agile = game.myBoard(this.gameState, this.myName).agile
+        const moves = game.myMoves(this.gameState, this.myName)
         return board.hitOrMiss(r, c, moves, agile, this.result)
       }
     },
     hitOrMissMe(r, c) {
       if (this.gameSet) {
-        var moves = game.theirMoves(this.gameState, this.myName)
+        const moves = game.theirMoves(this.gameState, this.myName)
         return board.hitOrMiss(r, c, moves, false, this.result)
       }
     },
@@ -107,7 +150,7 @@ export default {
       return this.gameState[0].moves.length > 0 || this.gameState[1].moves.length > 0
     },
     place(r, c) {
-      var myBoard = game.myBoard(this.gameState, this.myName).board
+      const myBoard = game.myBoard(this.gameState, this.myName).board
       if (this.selectedBoat && this.selectedOrientation && board.canPlaceBoat(this.selectedBoat, r, c, this.selectedOrientation, myBoard)) {
         if (this.selectedOrientation == 'vertical') {
           r = board.placeN(r, this.selectedBoat)
@@ -116,50 +159,21 @@ export default {
           c = board.placeN(c, this.selectedBoat)
         }
         console.log('Placing ' + this.selectedBoat.name + ' ' + this.selectedOrientation + 'ly at (' + this.rows[r] + ', ' + this.columns[c] + ')')
-        this.socket.emit("placeBoat", {gameName: this.gameName, name: this.myName, boat: this.selectedBoat, orientation: this.selectedOrientation, row: r, column: c})
+        this.socket.emit('placeBoat', {gameName: this.gameName, name: this.myName, boat: this.selectedBoat, orientation: this.selectedOrientation, row: r, column: c})
         this.selectedBoat = ''
         this.selectedOrientation = ''
       }
     },
     cellBoat(r, c) {
       if (this.gameSet) {
-        var myBoard = game.myBoard(this.gameState, this.myName).board
-        var val = board.cellValue(r, c, myBoard)
+        const myBoard = game.myBoard(this.gameState, this.myName).board
+        const val = board.cellValue(r, c, myBoard)
         if (val) {
            return val.split('')[0].toUpperCase()
         } else {
           return ''
         }
       }
-    }
-  },
-  computed: {
-    myName() {
-      return this.$store.getters.getMyName;
-    },
-    theirName() {
-      return this.$store.getters.getTheirName;
-    },
-    gameName() {
-      return this.$store.getters.getGameName;
-    },
-    boats() {
-      return this.$store.getters.getBoats;
-    },
-    totalScore() {
-      return this.$store.getters.getTotalScore;
-    },
-    maxMoves() {
-      return this.$store.getters.getMaxMoves;
-    },
-    result() {
-      return this.$store.getters.getResult;
-    },
-    gameSet() {
-      return this.$store.getters.gameSet;
-    },
-    gameState() {
-      return this.$store.getters.getGameState;
     }
   }
 }

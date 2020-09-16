@@ -1,11 +1,11 @@
 <template>
-
   <div class="who-is-agile">
-    <button class="btn btn-sm btn-secondary smaller-font" :disabled="gameState.length < 2" v-if="!agileSet()" @click="setAgile()">Who is Agile?</button>
+    <button class="btn btn-sm btn-secondary smaller-font" :disabled="gameState.length < 2" v-if="!agileSet()" @click="setAgile()">
+      Who is Agile?
+    </button>
     <span v-if="iAmAgile()" class="rounded mr-2 mt-2 pointer p-2 bg-light">I am Agile</span>
     <span v-if="iAmNotAgile()" class="rounded mr-2 mt-2 pointer p-2 bg-light">I am not Agile</span>
   </div>
-
 </template>
 
 <script>
@@ -15,6 +15,17 @@ export default {
   props: [
     'socket'
   ],
+  computed: {
+    myName() {
+      return this.$store.getters.getMyName
+    },
+    gameName() {
+      return this.$store.getters.getGameName
+    },
+    gameState() {
+      return this.$store.getters.getGameState
+    }
+  },
   methods: {
     agileSet() {
       return this.gameState.length == 2 && this.gameState[0].agile
@@ -26,18 +37,7 @@ export default {
       return this.agileSet() && game.myBoard(this.gameState, this.myName).agile == 'no'
     },
     setAgile() {
-      this.socket.emit("setAgile", {gameName: this.gameName})
-    }
-  },
-  computed: {
-    myName() {
-      return this.$store.getters.getMyName;
-    },
-    gameName() {
-      return this.$store.getters.getGameName;
-    },
-    gameState() {
-      return this.$store.getters.getGameState;
+      this.socket.emit('setAgile', {gameName: this.gameName})
     }
   }
 }

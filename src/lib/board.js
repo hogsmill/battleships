@@ -1,5 +1,5 @@
 
-var size = 10
+const size = 10
 
 function swap(element, highlight) {
   if (highlight) {
@@ -10,7 +10,8 @@ function swap(element, highlight) {
 }
 
 function swapHighlight(r, c, boat, orientation) {
-  var i, id, element, cells = document.getElementsByClassName('board-cell')
+  let i, id, element
+  const cells = document.getElementsByClassName('board-cell')
   for (i = 0; i < cells.length; i++) {
     swap(cells[i], false)
   }
@@ -48,11 +49,11 @@ function nBetween(n, _start, _end) {
 }
 
 function clash(r1, c1, orientation1, size1, r2, c2, orientation2, size2) {
-  var clashing = false
-  var c1end = parseInt(c1 + size1)
-  var c2end = parseInt(c2 + size2)
-  var r1end = parseInt(r1 + size1)
-  var r2end = parseInt(r2 + size2)
+  let clashing = false
+  const c1end = parseInt(c1 + size1)
+  const c2end = parseInt(c2 + size2)
+  const r1end = parseInt(r1 + size1)
+  const r2end = parseInt(r2 + size2)
   if (orientation1 == 'horizontal' && orientation2 == 'horizontal') {
     clashing = r1 == r2 && (nBetween(c2, c1, c1end) || nBetween(c2end, c1, c1end))
   } else if (orientation1 == 'horizontal' && orientation2 == 'vertical') {
@@ -66,8 +67,8 @@ function clash(r1, c1, orientation1, size1, r2, c2, orientation2, size2) {
 }
 
 function notClashing(boat, r, c, orientation, board) {
-  var clashing = false
-  for (var i = 0; i < board.length; i++) {
+  let clashing = false
+  for (let i = 0; i < board.length; i++) {
     if (clash(r, c, orientation, boat.size, board[i].row, board[i].column, board[i].orientation, board[i].boat.size)) {
       clashing = true
     }
@@ -75,7 +76,7 @@ function notClashing(boat, r, c, orientation, board) {
   return !clashing
 }
 
-var Board = {
+const Board = {
 
   highlight: function(r, c, boat, orientation) {
     swapHighlight(r, c, boat, orientation, true)
@@ -86,7 +87,8 @@ var Board = {
   },
 
   select: function() {
-    var i, ids = [], highlightedCells = document.getElementsByClassName('highlighted')
+    let i
+    const ids = [], highlightedCells = document.getElementsByClassName('highlighted')
     for (i = 0; i < highlightedCells.length; i++) {
       ids.push(  highlightedCells[i].id)
     }
@@ -97,7 +99,7 @@ var Board = {
   },
 
   canPlaceBoat: function(boat, r, c, orientation, board) {
-    var ok = false
+    let ok = false
     // physical placement
     if (orientation == 'vertical' && r + boat.size <= size && r + boat.size < 10) {
       ok = true
@@ -114,9 +116,9 @@ var Board = {
   },
 
   cellValue: function(r, c, board) {
-    var cellVal = false
-    for (var i = 0; i < board.length; i++) {
-      var boat = board[i].boat
+    let cellVal = false
+    for (let i = 0; i < board.length; i++) {
+      const boat = board[i].boat
       if (board[i].orientation == 'horizontal' && r == board[i].row && c >= board[i].column && c < board[i].column + boat.size) {
         cellVal = boat.name
       } else if (board[i].orientation == 'vertical' && c == board[i].column && r >= board[i].row && r < board[i].row + boat.size) {
@@ -127,9 +129,9 @@ var Board = {
   },
 
   hitOrMiss: function(r, c, moves, agile, result) {
-    var val = ''
+    let val = ''
     if (moves) {
-      for (var i = 0; i < moves.length; i++) {
+      for (let i = 0; i < moves.length; i++) {
         if (r == moves[i].row && c == moves[i].column) {
           if (moves[i].hit) {
             val = {class: 'hit', boat: moves[i].hit.boat.name.split('')[0]}
