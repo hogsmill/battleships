@@ -1,3 +1,26 @@
+const fs = require('fs')
+const ON_DEATH = require('death')({uncaughtException: true})
+
+ON_DEATH(function(signal, err) {
+  let logStr = new Date()
+  if (signal) {
+    logStr = logStr + ' ' + signal + '\n'
+  }
+  if (currentAction) {
+    logStr = logstr + '  Action: ' + currentAction + '\n'
+  }
+  if (currentData) {
+    logStr = logstr + '  Data: ' + currentData + '\n'
+  }
+  if (err && err.stack) {
+    logStr = logStr + '  Error: ' + err.stack + '\n'
+  }
+  fs.appendFile('server.log', logStr, function (err) {
+    if (err) console.log(logStr)
+    process.exit()
+  })
+})
+
 const app = require('express')()
 const http = require('http').createServer(app)
 const io = require('socket.io')(http)
@@ -23,7 +46,11 @@ function emit(event, data) {
   io.emit(event, data)
 }
 
+let currentAction = ''
+let currentData = ''
 function doDb(fun, data) {
+  currentAction = fun
+  currentData = data
   MongoClient.connect(url, { useUnifiedTopology: true }, function (err, client) {
     if (err) throw err
     const db = client.db('db')
