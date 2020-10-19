@@ -7,10 +7,10 @@ ON_DEATH(function(signal, err) {
     logStr = logStr + ' ' + signal + '\n'
   }
   if (currentAction) {
-    logStr = logstr + '  Action: ' + currentAction + '\n'
+    logStr = logStr + '  Action: ' + currentAction + '\n'
   }
   if (currentData) {
-    logStr = logstr + '  Data: ' + currentData + '\n'
+    logStr = logStr + '  Data: ' + currentData + '\n'
   }
   if (err && err.stack) {
     logStr = logStr + '  Error: ' + err.stack + '\n'
