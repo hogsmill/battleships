@@ -130,7 +130,6 @@ export default {
     },
   },
   mounted() {
-    console.log('here')
     const self = this
     if (params.isParam('walkThrough')) {
       self.$store.dispatch('updateWalkThrough', true)
