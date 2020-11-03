@@ -90,6 +90,7 @@ export default {
         },
         'Thanks for your feedback - we appreciate it!'
       )
+      this.hide()
     }
   },
 }
