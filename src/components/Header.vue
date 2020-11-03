@@ -94,3 +94,19 @@ export default {
   },
 }
 </script>
+
+<style>
+  .feedback {
+    letter-spacing: 0;
+    color: #212529;
+  }
+
+  p.feedback-form {
+    margin-bottom: 12px;
+  }
+
+  .feedback-form {
+    width: 80%;
+    margin: 0 auto;
+  }
+</style>
