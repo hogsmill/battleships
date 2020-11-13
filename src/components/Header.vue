@@ -17,12 +17,6 @@
 
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav ml-auto">
-        <li class="nav-item" :class="{ active: !showAbout }">
-          <a class="nav-link pointer" @click="updateShowAbout(false)">Simulation</a>
-        </li>
-        <li class="nav-item" :class="{ active: showAbout }">
-          <a class="nav-link pointer" @click="updateShowAbout(true)">About</a>
-        </li>
         <li class="nav-item">
           <a class="nav-link pointer" @click="show()">Feedback</a>
         </li>
@@ -37,7 +31,7 @@
         <div class="mt-4">
           <h4>Feedback</h4>
           <p class="feedback-form">
-            Thanks for playing {{ thisGame }}; we'd love to hear any feedback you have
+            Thanks for visiting Agile Simulation Labs; we'd love to hear any feedback you have
             so that we can constantly improve things.
           </p>
           <div class="feedback-form">
@@ -59,23 +53,7 @@
 import mailFuns from '../lib/mail.js'
 
 export default {
-  computed: {
-    thisGame() {
-      return this.$store.getters.thisGame
-    },
-    showAbout() {
-      return this.$store.getters.getShowAbout
-    },
-  },
-  created() {
-    if (location.search == '?host') {
-      this.$store.dispatch('updateHost', true)
-    }
-  },
   methods: {
-    updateShowAbout(payload) {
-      this.$store.dispatch('updateShowAbout', payload)
-    },
     show () {
       this.$modal.show('feedback')
     },
@@ -84,7 +62,7 @@ export default {
     },
     sendFeedback() {
       mailFuns.post({
-        action: 'Feedback from ' + this.thisGame,
+        action: 'Feedback from Labs',
         email: encodeURIComponent(document.getElementById('email').value),
         comments: encodeURIComponent(document.getElementById('comments').value)
         },
