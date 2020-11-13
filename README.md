@@ -33,3 +33,4 @@ This is will listen on localhost:3003
 "# mastermind" 
 "# change-management-game" 
 "# battleships" 
+"# labs" 
