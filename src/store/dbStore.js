@@ -14,6 +14,7 @@ function createNewGame(data) {
     {name: 'patrol-boat', size: 2}
   ]
   game.created = new Date().toISOString()
+  game.lastaccess = new Date().toISOString()
 
   let total = 0
   for (let i = 0; i < game.boats.length; i++) {
@@ -68,6 +69,9 @@ function _loadGame(err, client, db, io, data, debugOn) {
   db.collection('battleships').findOne({gameName: data.gameName}, function(err, res) {
     if (err) throw err
     if (res) {
+      db.collection('battleships').updateOne({'_id': res._id}, {$set: {lastaccess: new Date().toISOString()} }, function(err) {
+        if (err) throw err
+      })
       if (debugOn) { console.log('Loading game \'' + data.gameName + '\'') }
       io.emit('loadGame', res)
       client.close()
