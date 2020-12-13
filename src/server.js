@@ -1,6 +1,9 @@
 const fs = require('fs')
 const ON_DEATH = require('death')({uncaughtException: true})
-const logFile = process.argv[4]
+const os = require('os')
+const prod = os.hostname() == 'agilesimulations' ? true : false
+
+const logFile = prod ? process.argv[4] : 'server.log'
 
 ON_DEATH(function(signal, err) {
   let logStr = new Date()
@@ -25,13 +28,11 @@ ON_DEATH(function(signal, err) {
 const app = require('express')()
 const http = require('http').createServer(app)
 const io = require('socket.io')(http)
-const os = require('os')
 
 const dbStore = require('./store/dbStore.js')
 
 const MongoClient = require('mongodb').MongoClient
 
-const prod = os.hostname() == 'agilesimulations' ? true : false
 const url = prod ?  'mongodb://127.0.0.1:27017/' : 'mongodb://localhost:27017/'
 const maxIdleTime = 7200000
 
