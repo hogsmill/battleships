@@ -33,6 +33,7 @@ const MongoClient = require('mongodb').MongoClient
 
 const prod = os.hostname() == 'agilesimulations' ? true : false
 const url = prod ?  'mongodb://127.0.0.1:27017/' : 'mongodb://localhost:27017/'
+const maxIdleTime = 7200000
 
 const connectDebugOff = prod
 const debugOn = !prod
@@ -52,7 +53,7 @@ let currentData = ''
 function doDb(fun, data) {
   currentAction = fun
   currentData = data
-  MongoClient.connect(url, { useUnifiedTopology: true }, function (err, client) {
+  MongoClient.connect(url, { useUnifiedTopology: true, maxIdleTimeMS: maxIdleTime }, function (err, client) {
     if (err) throw err
     const db = client.db('db')
 

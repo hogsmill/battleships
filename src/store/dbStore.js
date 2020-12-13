@@ -74,7 +74,6 @@ function _loadGame(err, client, db, io, data, debugOn) {
       })
       if (debugOn) { console.log('Loading game \'' + data.gameName + '\'') }
       io.emit('loadGame', res)
-      client.close()
     } else {
       const game = createNewGame(data)
       if (debugOn) { console.log('Creating game \'' + data.gameName + '\'') }
