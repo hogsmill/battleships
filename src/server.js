@@ -10,12 +10,6 @@ ON_DEATH(function(signal, err) {
   if (signal) {
     logStr = logStr + ' ' + signal + '\n'
   }
-  if (currentAction) {
-    logStr = logStr + '  Action: ' + currentAction + '\n'
-  }
-  if (currentData) {
-    logStr = logStr + '  Data: ' + currentData + '\n'
-  }
   if (err && err.stack) {
     logStr = logStr + '  Error: ' + err.stack + '\n'
   }
@@ -73,75 +67,42 @@ function emit(event, data) {
   io.emit(event, data)
 }
 
-let currentAction = ''
-let currentData = ''
-function doDb(fun, data) {
-  currentAction = fun
-  currentData = data
-  MongoClient.connect(url, { useUnifiedTopology: true, maxIdleTimeMS: maxIdleTime }, function (err, client) {
-    if (err) throw err
-    const db = client.db('db')
+MongoClient.connect(url, { useUnifiedTopology: true, maxIdleTimeMS: maxIdleTime }, function (err, client) {
+  if (err) throw err
+  const db = client.db('db')
 
-    switch(fun) {
-      case 'loadGame':
-        dbStore.loadGame(err, client, db, io, data, debugOn)
-        break
-      case 'restartGame':
-        dbStore.restartGame(err, client, db, io, data, debugOn)
-        break
-      case 'addPlayer':
-        dbStore.addPlayer(err, client, db, io, data, debugOn)
-        break
-      case 'removePlayer':
-        dbStore.removePlayer(err, client, db, io, data, debugOn)
-        break
-      case 'setAgile':
-        dbStore.setAgile(err, client, db, io, data, debugOn)
-        break
-      case 'changeName':
-        dbStore.changeName(err, client, db, io, data, debugOn)
-        break
-      case 'placeBoat':
-        dbStore.placeBoat(err, client, db, io, data, debugOn)
-        break
-      case 'makeMove':
-        dbStore.makeMove(err, client, db, io, data, debugOn)
-        break
+  io.on('connection', (socket) => {
+    connections = connections + 1
+    if (connections > maxConnections) {
+      console.log(`Too many connections. Socket ${socket.id} closed`)
+      socket.disconnect(0)
+    } else {
+      connectDebugOff || console.log(`A user connected with socket id ${socket.id}. (${connections} connections)`)
+      emit('updateConnections', {connections: connections, maxConnections: maxConnections})
     }
+
+    socket.on('disconnect', () => {
+      connections = connections - 1
+      connectDebugOff || console.log(`User with socket id ${socket.id} has disconnected. (${connections} connections)`)
+      emit('updateConnections', {connections: connections, maxConnections: maxConnections})
+    })
+
+    socket.on('loadGame', (data) => { dbStore.loadGame(db, io, data, debugOn) })
+
+    socket.on('restartGame', (data) => { dbStore.restartGame(db, io, data, debugOn) })
+
+    socket.on('changeName', (data) => { dbStore.changeName(db, io, data, debugOn) })
+
+    socket.on('addPlayer', (data) => { dbStore.addPlayer(db, io, data, debugOn) })
+
+    socket.on('removePlayer', (data) => { dbStore.removePlayer(db, io, data, debugOn) })
+
+    socket.on('setAgile', (data) => { dbStore.setAgile(db, io, data, debugOn) })
+
+    socket.on('placeBoat', (data) => { dbStore.placeBoat(db, io, data, debugOn) })
+
+    socket.on('makeMove', (data) => { dbStore.makeMove(db, io, data, debugOn) })
   })
-}
-io.on('connection', (socket) => {
-  connections = connections + 1
-  if (connections > maxConnections) {
-    console.log(`Too many connections. Socket ${socket.id} closed`)
-    socket.disconnect(0)
-  } else {
-    connectDebugOff || console.log(`A user connected with socket id ${socket.id}. (${connections} connections)`)
-    emit('updateConnections', {connections: connections, maxConnections: maxConnections})
-  }
-
-  socket.on('disconnect', () => {
-    connections = connections - 1
-    connectDebugOff || console.log(`User with socket id ${socket.id} has disconnected. (${connections} connections)`)
-    emit('updateConnections', {connections: connections, maxConnections: maxConnections})
-  })
-
-  socket.on('loadGame', (data) => { doDb('loadGame', data) })
-
-  socket.on('restartGame', (data) => { doDb('restartGame', data) })
-
-  socket.on('changeName', (data) => { doDb('changeName', data) })
-
-  socket.on('addPlayer', (data) => { doDb('addPlayer', data) })
-
-  socket.on('removePlayer', (data) => { doDb('removePlayer', data) })
-
-  socket.on('setAgile', (data) => { doDb('setAgile', data) })
-
-  socket.on('placeBoat', (data) => { doDb('placeBoat', data) })
-
-  socket.on('makeMove', (data) => { doDb('makeMove', data) })
-
 })
 
 const port = process.argv[2] || 3008

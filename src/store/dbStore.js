@@ -62,7 +62,7 @@ function gameOver(game) {
   return over
 }
 
-function _loadGame(err, client, db, io, data, debugOn) {
+function _loadGame(db, io, data, debugOn) {
 
   if (debugOn) { console.log('loadGame', data) }
 
@@ -88,23 +88,23 @@ function _loadGame(err, client, db, io, data, debugOn) {
 
 module.exports = {
 
-  loadGame: function(err, client, db, io, data, debugOn) {
+  loadGame: function(db, io, data, debugOn) {
 
     if (debugOn) { console.log('loadGame', data) }
 
-    _loadGame(err, client, db, io, data, debugOn)
+    _loadGame(db, io, data, debugOn)
   },
 
-  restartGame: function(err, client, db, io, data, debugOn) {
+  restartGame: function(db, io, data, debugOn) {
 
     if (debugOn) { console.log('restartGame', data) }
 
     db.collection('battleships').deleteMany({gameName: data.gameName}, function(err, res) {
-      _loadGame(err, client, db, io, data, debugOn)
+      _loadGame(db, io, data, debugOn)
     })
   },
 
-  addPlayer: function(err, client, db, io, data, debugOn) {
+  addPlayer: function(db, io, data, debugOn) {
 
     if (debugOn) { console.log('addPlayer', data) }
 
@@ -127,7 +127,7 @@ module.exports = {
     })
   },
 
-  removePlayer: function(err, client, db, io, data, debugOn) {
+  removePlayer: function(db, io, data, debugOn) {
 
     if (debugOn) { console.log('removePlayer', data) }
 
@@ -150,7 +150,7 @@ module.exports = {
     })
   },
 
-  setAgile: function(err, client, db, io, data, debugOn) {
+  setAgile: function(db, io, data, debugOn) {
 
     if (debugOn) { console.log('setAgile', data) }
 
@@ -175,7 +175,7 @@ module.exports = {
     })
   },
 
-  changeName: function(err, client, db, io, data, debugOn) {
+  changeName: function(db, io, data, debugOn) {
 
     if (debugOn) { console.log('changeName', data) }
 
@@ -200,7 +200,7 @@ module.exports = {
     })
   },
 
-  placeBoat: function(err, client, db, io, data, debugOn) {
+  placeBoat: function(db, io, data, debugOn) {
 
     if (debugOn) { console.log('placeBoat', data) }
 
@@ -232,7 +232,7 @@ module.exports = {
     })
   },
 
-  makeMove: function(err, client, db, io, data, debugOn) {
+  makeMove: function(db, io, data, debugOn) {
 
     if (debugOn) { console.log('makeMove', data) }
 
