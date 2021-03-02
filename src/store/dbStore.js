@@ -80,7 +80,6 @@ function _loadGame(db, io, data, debugOn) {
       db.collection('battleships').insertOne(game, function(err, rec) {
         if (err) throw err
         io.emit('loadGame', game)
-        client.close()
       })
     }
   })
