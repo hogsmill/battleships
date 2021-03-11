@@ -11,15 +11,15 @@
         Current server connections: {{ connections.connections }} / {{ connections.maxConnections }}
       </div>
       <div class="names">
-        <GameName :socket="socket" />
-        <MyName :socket="socket" />
+        <GameName />
+        <MyName />
         <OtherName />
-        <Agile :socket="socket" />
+        <Agile />
       </div>
       <div class="container">
         <div class="row">
           <Moves />
-          <Board :socket="socket" />
+          <Board />
         </div>
       </div>
     </div>
@@ -48,7 +48,7 @@
 </template>
 
 <script>
-import io from 'socket.io-client'
+import bus from './socket.js'
 
 import params from './lib/params.js'
 
@@ -106,15 +106,6 @@ export default {
     }
   },
   created() {
-    let connStr
-    if (location.hostname == 'localhost') {
-      connStr = 'http://localhost:3008'
-    } else {
-      connStr = 'https://agilesimulations.co.uk:3008'
-    }
-    console.log('Connecting to: ' + connStr)
-    this.socket = io(connStr)
-
     if (params.isParam('host')) {
       this.$store.dispatch('updateHost', true)
     }
@@ -127,40 +118,40 @@ export default {
 
     const gameName = localStorage.getItem('gameName-bs')
     if (gameName) {
-      this.socket.emit('loadGame', {gameName: gameName})
+      bus.$emit('sendLoadGame', {gameName: gameName})
       this.$store.dispatch('updateGameName', gameName)
     }
 
     if (myName && gameName) {
-      this.socket.emit('addPlayer', {gameName: gameName, player: myName})
+      bus.$emit('sendAddPlayer', {gameName: gameName, player: myName})
     }
 
-    this.socket.on('loadGame', (data) => {
+    bus.$on('loadGame', (data) => {
       if (this.gameName == data.gameName) {
         this.$store.dispatch('loadGame', data)
       }
     })
 
-    this.socket.on('updateGameState', (data) => {
+    bus.$on('updateGameState', (data) => {
       if (this.gameName == data.gameName) {
         this.$store.dispatch('updateGameState', data)
       }
     })
 
-    this.socket.on('removePlayer', (data) => {
+    bus.$on('removePlayer', (data) => {
       if (this.gameName == data.gameName) {
         this.$store.dispatch('removePlayer', data)
       }
     })
 
-    this.socket.on('gameOver', (data) => {
+    bus.$on('gameOver', (data) => {
       if (this.gameName == data.gameName) {
         this.$store.dispatch('gameOver', data)
         self.show()
       }
     })
 
-    this.socket.on('updateConnections', (data) => {
+    bus.$on('updateConnections', (data) => {
       this.$store.dispatch('updateConnections', data)
     })
   },

@@ -26,12 +26,11 @@
 </template>
 
 <script>
+import bus from '../socket.js'
+
 import { v4 as uuidv4 } from 'uuid'
 
 export default {
-  props: [
-    'socket'
-  ],
   computed: {
     showAbout() {
       return this.$store.getters.getShowAbout
@@ -57,12 +56,12 @@ export default {
       if (!oldName.id) {
         const uuid = uuidv4()
         myNameData = {id: uuid, name: newName}
-        this.socket.emit('addPlayer', {gameName: this.gameName, player: myNameData, move: 0})
+        bus.$emit('sendAddPlayer', {gameName: this.gameName, player: myNameData, move: 0})
         this.$store.dispatch('setMyName', myNameData)
       } else {
         myNameData = {id: this.myName.id, name: newName}
         this.$store.dispatch('setMyName', myNameData)
-        this.socket.emit('changeName', {gameName: this.gameName, name: oldName, newName: newName})
+        bus.$emit('sendChangeName', {gameName: this.gameName, name: oldName, newName: newName})
       }
       localStorage.setItem('myName-bs', JSON.stringify(myNameData))
       this.hide()
@@ -71,7 +70,7 @@ export default {
       const ok = confirm('Are you sure you want to leave this game?')
       if (ok) {
         localStorage.removeItem('myName-bs')
-        this.socket.emit('removePlayer', {gameName: this.gameName, player: this.myName})
+        bus.$emit('sendRemovePlayer', {gameName: this.gameName, player: this.myName})
       }
     }
   }

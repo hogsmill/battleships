@@ -87,21 +87,21 @@ MongoClient.connect(url, { useUnifiedTopology: true, maxIdleTimeMS: maxIdleTime 
       emit('updateConnections', {connections: connections, maxConnections: maxConnections})
     })
 
-    socket.on('loadGame', (data) => { dbStore.loadGame(db, io, data, debugOn) })
+    socket.on('sendLoadGame', (data) => { dbStore.loadGame(db, io, data, debugOn) })
 
-    socket.on('restartGame', (data) => { dbStore.restartGame(db, io, data, debugOn) })
+    socket.on('sendRestartGame', (data) => { dbStore.restartGame(db, io, data, debugOn) })
 
-    socket.on('changeName', (data) => { dbStore.changeName(db, io, data, debugOn) })
+    socket.on('sendChangeName', (data) => { dbStore.changeName(db, io, data, debugOn) })
 
-    socket.on('addPlayer', (data) => { dbStore.addPlayer(db, io, data, debugOn) })
+    socket.on('sendAddPlayer', (data) => { dbStore.addPlayer(db, io, data, debugOn) })
 
-    socket.on('removePlayer', (data) => { dbStore.removePlayer(db, io, data, debugOn) })
+    socket.on('sendRemovePlayer', (data) => { dbStore.removePlayer(db, io, data, debugOn) })
 
-    socket.on('setAgile', (data) => { dbStore.setAgile(db, io, data, debugOn) })
+    socket.on('sendSetAgile', (data) => { dbStore.setAgile(db, io, data, debugOn) })
 
-    socket.on('placeBoat', (data) => { dbStore.placeBoat(db, io, data, debugOn) })
+    socket.on('sendPlaceBoat', (data) => { dbStore.placeBoat(db, io, data, debugOn) })
 
-    socket.on('makeMove', (data) => { dbStore.makeMove(db, io, data, debugOn) })
+    socket.on('sendMakeMove', (data) => { dbStore.makeMove(db, io, data, debugOn) })
   })
 })
 

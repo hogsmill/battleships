@@ -26,10 +26,9 @@
 </template>
 
 <script>
+import bus from '../socket.js'
+
 export default {
-  props: [
-    'socket'
-  ],
   computed: {
     showAbout() {
       return this.$store.getters.getShowAbout
@@ -49,13 +48,13 @@ export default {
       const gameName = document.getElementById('game-name').value
       this.$store.dispatch('updateGameName', gameName)
       localStorage.setItem('gameName-bs', gameName)
-      this.socket.emit('loadGame', {gameName: this.gameName})
+      bus.$emit('sendLoadGame', {gameName: this.gameName})
       this.hide()
     },
     restartGame() {
       const restartGame = confirm('Are you sure you want to re-start this game?')
       if (restartGame) {
-        this.socket.emit('restartGame', {gameName: this.gameName})
+        bus.$emit('sendRestartGame', {gameName: this.gameName})
       }
     }
   },

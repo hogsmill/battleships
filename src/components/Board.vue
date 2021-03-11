@@ -58,13 +58,12 @@
 </template>
 
 <script>
+import bus from '../socket.js'
+
 import board from '../lib/board.js'
 import game from '../lib/gameState.js'
 
 export default {
-  props: [
-    'socket'
-  ],
   data() {
     return {
       columns: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
@@ -120,7 +119,7 @@ export default {
       if (moves >= this.maxMoves) {
         alert('You have no more moves')
       } else {
-        this.socket.emit('makeMove', {gameName: this.gameName, name: this.myName, row: r, column: c})
+        bus.$emit('sendMakeMove', {gameName: this.gameName, name: this.myName, row: r, column: c})
       }
     },
     myCellClass(r, c) {
@@ -159,7 +158,7 @@ export default {
           c = board.placeN(c, this.selectedBoat)
         }
         console.log('Placing ' + this.selectedBoat.name + ' ' + this.selectedOrientation + 'ly at (' + this.rows[r] + ', ' + this.columns[c] + ')')
-        this.socket.emit('placeBoat', {gameName: this.gameName, name: this.myName, boat: this.selectedBoat, orientation: this.selectedOrientation, row: r, column: c})
+        bus.$emit('sendPlaceBoat', {gameName: this.gameName, name: this.myName, boat: this.selectedBoat, orientation: this.selectedOrientation, row: r, column: c})
         this.selectedBoat = ''
         this.selectedOrientation = ''
       }

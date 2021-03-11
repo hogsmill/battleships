@@ -9,12 +9,11 @@
 </template>
 
 <script>
+import bus from '../socket.js'
+
 import game from '../lib/gameState.js'
 
 export default {
-  props: [
-    'socket'
-  ],
   computed: {
     myName() {
       return this.$store.getters.getMyName
@@ -37,7 +36,7 @@ export default {
       return this.agileSet() && game.myBoard(this.gameState, this.myName).agile == 'no'
     },
     setAgile() {
-      this.socket.emit('setAgile', {gameName: this.gameName})
+      bus.$emit('sendSetAgile', {gameName: this.gameName})
     }
   }
 }

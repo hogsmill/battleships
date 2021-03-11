@@ -6,9 +6,6 @@
 
 <script>
 export default {
-  props: [
-    'socket'
-  ],
   computed: {
     showAbout() {
       return this.$store.getters.getShowAbout
