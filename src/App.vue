@@ -6,7 +6,6 @@
       <AboutView />
     </div>
     <div v-if="!showAbout" class="main">
-      <h1>Agile Battleships</h1>
       <div v-if="isHost" class="connections">
         Current server connections: {{ connections.connections }} / {{ connections.maxConnections }}
       </div>

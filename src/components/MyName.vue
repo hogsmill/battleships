@@ -80,7 +80,7 @@ export default {
 <style lang="scss">
 
 .my-name {
-  width: 120px;
+  width: 150px;
   display: inline-block;
 
   .cross {

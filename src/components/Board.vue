@@ -180,7 +180,8 @@ export default {
 
 <style lang="scss">
 
-  $cell-size: 50px;
+  $cell-width: 50px;
+  $cell-height: 40px;
   $header-color: cadetblue;
 
   .no-header {
@@ -206,8 +207,8 @@ export default {
 
     td {
       border: 1px solid #ccc;
-      width: $cell-size;
-      height: $cell-size;
+      width: $cell-width;
+      height: $cell-height;
 
       &.header {
         background-color: $header-color;
@@ -257,7 +258,7 @@ export default {
     .boat {
       display: inline-block;
       margin-left: 110px;
-      height: 100px;
+      height: 90px;
       width: 250px;
       background-repeat: no-repeat;
 
