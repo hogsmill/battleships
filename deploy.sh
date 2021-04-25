@@ -4,7 +4,6 @@ FORCE=false
 OUTDATED=true
 while [ $1 ]
 do
-  echo $1
   if [ "$1" == "-f" ]; then
     FORCE=true
   fi
@@ -17,7 +16,7 @@ done
 REPO="https://github.com/hogsmill/battleships.git"
 APPS=(
   'battleships,battleships,3008'
-  'battleships-new,battleshipsNew,3008,Battleships New,12345'
+  'battleships-new,battleshipsNew,3025,Battleships New,12345'
 )
 
 for ((i = 0; i < ${#APPS[@]}; i++))
