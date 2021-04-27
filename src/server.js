@@ -3,7 +3,9 @@ const ON_DEATH = require('death')({uncaughtException: true})
 const os = require('os')
 const prod = os.hostname() == 'agilesimulations' ? true : false
 
+const port = prod ? process.env.VUE_APP_PORT : 3008
 const logFile = prod ? process.argv[4] : 'server.log'
+const gameCollection =  prod ? process.env.VUE_APP_COLLECTION : 'battleships'
 
 ON_DEATH(function(signal, err) {
   let logStr = new Date()
@@ -71,6 +73,10 @@ MongoClient.connect(url, { useUnifiedTopology: true, maxIdleTimeMS: maxIdleTime 
   if (err) throw err
   const db = client.db('db')
 
+  db.createCollection(gameCollection, function(error, collection) {})
+
+  db.gameCollection = db.collection(gameCollection)
+
   io.on('connection', (socket) => {
     connections = connections + 1
     if (connections > maxConnections) {
@@ -104,8 +110,6 @@ MongoClient.connect(url, { useUnifiedTopology: true, maxIdleTimeMS: maxIdleTime 
     socket.on('sendMakeMove', (data) => { dbStore.makeMove(db, io, data, debugOn) })
   })
 })
-
-const port = process.argv[2] || 3008
 
 httpServer.listen(port, () => {
   console.log('Listening on *:' + port)
