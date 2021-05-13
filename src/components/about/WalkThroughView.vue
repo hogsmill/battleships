@@ -7,7 +7,7 @@
     >
       Explain this for me...
     </button>
-    <modal name="walk-through" id="walk-through" :height="350" :classes="['rounded']">
+    <modal name="walk-through" id="walk-through" :height="400" :classes="['rounded']">
       <div class="float-right mr-2 mt-1">
         <button type="button" class="close" @click="hide" aria-label="Close">
           <span aria-hidden="true">&times;</span>
@@ -17,7 +17,9 @@
         <h4>Welcome to Agile Battleships</h4>
         <div>
           <p>
-            The classic board game with an agile twist! Explore why frequent and timely
+            Big thanks to <a href="https://www.linkedin.com/in/jamesscrimshire/">James Scrimshire</a> for inventing
+            this game and collaborating with us in building the online version. Nice one!
+            This is the classic board game with a proper agile twist! Explore why frequent and timely
             feedback makes progress that much quicker - in battleships, as in development...
           </p>
           <p>
@@ -201,8 +203,8 @@ export default {
   }
 
   #walk-through p {
-    margin-left: 8px;
-    margin-right: 8px;
+    margin-left: 12px;
+    margin-right: 12px;
   }
 
   .walkthrough-button {
