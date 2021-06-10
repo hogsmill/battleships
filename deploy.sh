@@ -16,7 +16,7 @@ done
 REPO="https://github.com/hogsmill/battleships.git"
 APPS=(
   'battleships,battleships,3008'
-  'battleships-new,battleshipsNew,3026,Battleships New,12345'
+  'battleships-guardian,battleshipsNew,3026,Battleships,12345'
 )
 
 for ((i = 0; i < ${#APPS[@]}; i++))
