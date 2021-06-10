@@ -3,8 +3,10 @@
     <button class="btn btn-sm btn-secondary smaller-font" v-if="gameState.length >= 2 && !agileSet" @click="setAgile()">
       Who is Agile?
     </button>
+    <!--
     <span v-if="agileSet && iAmAgile()" class="rounded mr-2 mt-2 pointer p-2 bg-light">I am Agile</span>
     <span v-if="agileSet && iAmNotAgile()" class="rounded mr-2 mt-2 pointer p-2 bg-light">I am not Agile</span>
+    -->
   </div>
 </template>
 

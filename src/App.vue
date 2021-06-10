@@ -100,7 +100,7 @@ export default {
       return this.$store.getters.getGameName
     },
     gameSet() {
-      return this.$store.getters.gameSet
+      return this.$store.getters.getGameSet
     },
     gameState() {
       return this.$store.getters.getGameState

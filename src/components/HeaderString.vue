@@ -1,14 +1,11 @@
 <template>
-  <div class="headerString">
-    <div>
+  <div class="header-string">
+    <h3>
       <span v-if="myName">I am <b>{{ myName.name }}</b></span>
       <span v-if="theirName">, I am playing <b>{{ theirName.name }}</b></span>
-      <span v-if="iAmAgile()">I am <b>Agile</b></span>
-      <span v-if="iAmNotAgile()"> and I am <b>not Agile</b></span>
-      <button v-if="!gameStarted" class="name btn btn-primary" @click="changeGame()">
-        Change
-      </button>
-    </div>
+      <span v-if="iAmAgile()"> and I am <b>Agile</b> <i class="far fa-smile-beam" /></span>
+      <span v-if="iAmNotAgile()"> and I am <b>not Agile</b> <i class="far fa-sad-tear" /></span>
+    </h3>
   </div>
 </template>
 
@@ -45,3 +42,16 @@ export default {
   }
 }
 </script>
+
+<style lang="scss">
+  .header-string {
+
+    .fa-smile-beam {
+      color: palegreen;
+    }
+
+    .fa-sad-tear {
+      color: firebrick;
+    }
+  }
+</style>

@@ -4,7 +4,10 @@ import Vuex from 'vuex'
 Vue.use(Vuex)
 
 function agileSet(state) {
-  return state.gameState.length == 2 && state.gameState[0].agile
+  console.log(state.gameState[0])
+  return state.gameState.length == 2 && Object.keys(state.gameState[0]).find((k) => {
+    return k == 'agile'
+  })
 }
 
 export const store = new Vuex.Store({
