@@ -1,10 +1,8 @@
 <template>
   <div class="game-name" v-if="!showAbout">
-    <button class="name btn btn-sm btn-secondary smaller-font" v-if="!gameName" @click="show">
+    <button class="name btn btn-primary" :disabled="gameStarted" @click="show">
       Set Game Name
     </button>
-    <span v-if="gameName" @click="show" class="rounded name mr-2 mt-2 pointer p-2 bg-light">Game: {{ gameName }}</span>
-    <span v-if="gameName" title="Restart Game" class="restart" @click="restartGame">&#8635;</span>
 
     <modal name="set-game-name" :height="120" :classes="['rounded', 'set-game-name']">
       <div class="mr-2 mt-1">
@@ -35,6 +33,9 @@ export default {
     },
     gameName() {
       return this.$store.getters.getGameName
+    },
+    gameStarted() {
+      return this.$store.getters.getGameStarted
     }
   },
   methods: {
@@ -50,12 +51,6 @@ export default {
       localStorage.setItem('gameName-bs', gameName)
       bus.$emit('sendLoadGame', {gameName: this.gameName})
       this.hide()
-    },
-    restartGame() {
-      const restartGame = confirm('Are you sure you want to re-start this game?')
-      if (restartGame) {
-        bus.$emit('sendRestartGame', {gameName: this.gameName})
-      }
     }
   },
 }
@@ -66,10 +61,6 @@ export default {
 .game-name {
   width: 200px;
   display: inline-block;
-
-  .restart:hover {
-    cursor: pointer;
-  }
 }
 .set-game-name {
 

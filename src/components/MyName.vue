@@ -1,6 +1,6 @@
 <template>
   <div class="my-name" v-if="!showAbout">
-    <button class="btn btn-sm btn-secondary smaller-font" v-if="!myName" @click="show">
+    <button class="btn btn-primary" v-if="!myName" :disabled="gameStarted" @click="show">
       Set My Name
     </button>
     <span v-if="myName" @click="show" class="rounded mr-2 mt-2 pointer p-2 bg-light">I am: {{ myName.name }}</span>
@@ -37,6 +37,9 @@ export default {
     },
     gameName() {
       return this.$store.getters.getGameName
+    },
+    gameStarted() {
+      return this.$store.getters.getGameStarted
     },
     myName() {
       return this.$store.getters.getMyName

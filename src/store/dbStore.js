@@ -103,6 +103,29 @@ module.exports = {
     })
   },
 
+  clearDetails: function(db, io, data, debugOn) {
+
+    if (debugOn) { console.log('clearDetails', data) }
+
+    db.gameCollection.findOne({gameName: data.gameName}, function(err, res) {
+      if (err) throw err
+      if (res) {
+        const gameState = []
+        for (let i = 0; i < gameState.length; i++) {
+          const player = gameState[i]
+          if (player.id != data.myName.id) {
+            gameState.push(player)
+          }
+        }
+        data.gameState = gameState
+        io.emit('updateGameState', data)
+        db.gameCollection.updateOne({'_id': res._id}, {$set: {gameState: data.gameState}}, function(err, rec) {
+          if (err) throw err
+        })
+      }
+    })
+  },
+
   addPlayer: function(db, io, data, debugOn) {
 
     if (debugOn) { console.log('addPlayer', data) }
@@ -111,11 +134,18 @@ module.exports = {
       if (err) throw err
       if (res) {
         const gameState = res.gameState
-        if (!res.gameState.find(function(p) { return p.id == data.player.id })) {
-          data.player.board = []
-          data.player.moves = []
-          data.player.score = 0
-          gameState.push(data.player)
+        const existing = res.gameState.find((p) => {
+          return p.id == data.player.id
+        })
+        if (!existing) {
+          if (res.gameState.length >= 2) {
+            io.emit('tooManyPlayers', data)
+          } else {
+            data.player.board = []
+            data.player.moves = []
+            data.player.score = 0
+            gameState.push(data.player)
+          }
         }
         data.gameState = gameState
         io.emit('updateGameState', data)

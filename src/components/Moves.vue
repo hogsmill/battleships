@@ -1,5 +1,5 @@
 <template>
-  <div class="moves">
+  <div class="moves" v-if="gameSet">
     <div v-if="movesDone() > 0" class="moves-done" :style="{'width': getMoves()}">
       {{ movesDone() }}
     </div>

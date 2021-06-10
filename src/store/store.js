@@ -6,6 +6,7 @@ Vue.use(Vuex)
 export const store = new Vuex.Store({
   state: {
     thisGame: 'Agile Battleships',
+
     connections: 0,
     showAbout: false,
     walkThrough: false,
@@ -21,6 +22,9 @@ export const store = new Vuex.Store({
   getters: {
     thisGame: (state) => {
       return state.thisGame
+    },
+    lsSuffix: (state) => {
+      return 'bs'
     },
     getHost: (state) => {
       return state.host
@@ -38,7 +42,12 @@ export const store = new Vuex.Store({
       return state.theirName
     },
     getGameName: (state) => {
+      console.log(state)
       return state.gameName
+    },
+    getGameStarted: (state) => {
+      return false
+      //return state.gameState[0].moves.length || state.gameState[1].moves.length
     },
     getBoats: (state) => {
       return state.boats

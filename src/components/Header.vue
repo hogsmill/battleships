@@ -16,7 +16,12 @@
     </button>
 
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <h1>Agile Battleships</h1>
+      <h1>
+        Agile Battleships
+        <span v-if="gameName">- Game: {{ gameName }}</span>
+        <i v-if="gameName" title="Restart Game" @click="restartGame()" class="fas fa-undo-alt" />
+        <i v-if="gameName" title="Delete My Details" @click="deleteMyDetails()" class="fas fa-trash-alt" />
+      </h1>
       <ul class="navbar-nav ml-auto">
         <li class="nav-item" :class="{ active: !showAbout }">
           <a class="nav-link pointer" @click="updateShowAbout(false)">Simulation</a>
@@ -57,12 +62,24 @@
 </template>
 
 <script>
+import bus from '../socket.js'
+
+import ls from '../lib/localStorage.js'
 import mailFuns from '../lib/mail.js'
 
 export default {
   computed: {
+    lsSuffix() {
+      return this.$store.getters.lsSuffix
+    },
     thisGame() {
       return this.$store.getters.thisGame
+    },
+    gameName() {
+      return this.$store.getters.getGameName
+    },
+    myName() {
+      return this.$store.getters.getMyName
     },
     showAbout() {
       return this.$store.getters.getShowAbout
@@ -92,19 +109,50 @@ export default {
         'Thanks for your feedback - we appreciate it!'
       )
       this.hide()
+    },
+    restartGame() {
+      const restartGame = confirm('Are you sure you want to re-start this game?')
+      if (restartGame) {
+        bus.$emit('sendRestartGame', {gameName: this.gameName})
+      }
+    },
+    deleteMyDetails() {
+      if (confirm('Delete your game details?')) {
+        ls.clear(this.lsSuffix)
+        bus.$emit('sendClearDetails', {gameName: this.gameName, myName: this.myName})
+      }
     }
   },
 }
 </script>
 
-<style>
-  h1 {
-    letter-spacing: initial;
-    margin-left: 6px;
-    font-weight: bold;
-    text-shadow: 2px 2px 3px #444;
-    font-size: xx-large;
-    line-height: 1;
+<style lang="scss">
+  nav {
+
+    h1 {
+      letter-spacing: initial;
+      margin-left: 6px;
+      font-weight: bold;
+      text-shadow: 2px 2px 3px #444;
+      font-size: xx-large;
+      line-height: 1;
+
+      span {
+        margin-right: 12px;
+      }
+
+      .fas {
+        margin: 0 4px;
+        text-shadow: none;
+        font-size: smaller;
+        opacity: 0.5;
+
+        &:hover {
+          cursor: pointer;
+          opacity: 1;
+        }
+      }
+    }
   }
 
   .feedback {

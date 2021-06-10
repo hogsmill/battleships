@@ -21,6 +21,7 @@
           <Board />
         </div>
       </div>
+      <div v-if="!showAbout && !gameName" class="ship" />
     </div>
 
     <modal name="game-over" :height="150" :classes="['rounded', 'game-over']">
@@ -131,7 +132,14 @@ export default {
       }
     })
 
+    bus.$on('tooManyPlayers', (data) => {
+      if (this.gameName == data.gameName) {
+        alert('That game already has 2 players')
+      }
+    })
+
     bus.$on('updateGameState', (data) => {
+      console.log(data)
       if (this.gameName == data.gameName) {
         this.$store.dispatch('updateGameState', data)
       }
@@ -214,4 +222,15 @@ export default {
     }
   }
 
+  .ship {
+    margin: 36px auto 0 auto;
+    height: 400px;
+    width: 720px;
+    max-width: 100%;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position-x: center;
+    background-position-y: top;
+    background-image: url("./assets/img/ship.png");
+  }
 </style>
