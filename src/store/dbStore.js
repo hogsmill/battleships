@@ -98,24 +98,17 @@ module.exports = {
 
     if (debugOn) { console.log('restartGame', data) }
 
-    db.gameCollection.deleteMany({gameName: data.gameName}, function(err, res) {
-      _loadGame(db, io, data, debugOn)
-    })
-  },
-
-  clearDetails: function(db, io, data, debugOn) {
-
-    if (debugOn) { console.log('clearDetails', data) }
-
     db.gameCollection.findOne({gameName: data.gameName}, function(err, res) {
       if (err) throw err
       if (res) {
-        const gameState = []
-        for (let i = 0; i < gameState.length; i++) {
-          const player = gameState[i]
-          if (player.id != data.myName.id) {
-            gameState.push(player)
-          }
+        const players = []
+        for (let i = 0; i < res.gameState.length; i++) {
+          const player = res.gameState[i]
+          player.board = []
+          player.moves = []
+          player.score = 0
+          player.nextGo = i == 0 ? true : false
+          players.push(player)
         }
         data.gameState = gameState
         io.emit('updateGameState', data)
@@ -123,6 +116,16 @@ module.exports = {
           if (err) throw err
         })
       }
+    })
+  },
+
+  deleteGame: function(db, io, data, debugOn) {
+
+    if (debugOn) { console.log('deleteGame', data) }
+
+    db.gameCollection.deleteOne({gameName: data.gameName}, function(err, res) {
+      if (err) throw err
+      io.emit('gameDeleted', data)
     })
   },
 

@@ -14,7 +14,7 @@ const socket = io(connStr)
 
 bus.$on('sendLoadGame', (data) => { socket.emit('sendLoadGame', data) })
 
-bus.$on('sendClearDetails', (data) => { socket.emit('sendClearDetails', data) })
+bus.$on('sendDeleteGame', (data) => { socket.emit('sendDeleteGame', data) })
 
 bus.$on('sendRestartGame', (data) => { socket.emit('sendRestartGame', data) })
 
@@ -33,6 +33,8 @@ bus.$on('sendPlaceBoat', (data) => { socket.emit('sendPlaceBoat', data) })
 // Receive
 
 socket.on('loadGame', (data) => { bus.$emit('loadGame', data) })
+
+socket.on('gameDeleted', (data) => { bus.$emit('gameDeleted', data)  })
 
 socket.on('updateGameState', (data) => { bus.$emit('updateGameState', data) })
 

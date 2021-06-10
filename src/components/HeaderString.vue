@@ -5,7 +5,7 @@
       <span v-if="theirName">, I am playing <b>{{ theirName.name }}</b></span>
       <span v-if="iAmAgile()">I am <b>Agile</b></span>
       <span v-if="iAmNotAgile()"> and I am <b>not Agile</b></span>
-      <button>
+      <button v-if="!gameStarted" class="name btn btn-primary" @click="changeGame()">
         Change
       </button>
     </div>
@@ -24,6 +24,9 @@ export default {
     },
     gameState() {
       return this.$store.getters.getGameState
+    },
+    gameStarted() {
+      return this.$store.getters.getGameStarted
     },
     myName() {
       return this.$store.getters.getMyName

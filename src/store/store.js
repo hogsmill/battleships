@@ -10,7 +10,6 @@ function agileSet(state) {
 export const store = new Vuex.Store({
   state: {
     thisGame: 'Agile Battleships',
-
     connections: 0,
     showAbout: false,
     walkThrough: false,
@@ -60,8 +59,7 @@ export const store = new Vuex.Store({
       return state.gameName
     },
     getGameStarted: (state) => {
-      return false
-      //return state.gameState[0].moves.length || state.gameState[1].moves.length
+      return state.gameState.length == 2 && (state.gameState[0].moves.length || state.gameState[1].moves.length)
     },
     getBoats: (state) => {
       return state.boats
@@ -121,6 +119,16 @@ export const store = new Vuex.Store({
       state.totalScore = payload.totalScore
       state.gameState = payload.gameState
     },
+    gameDeleted: (state, payload) => {
+      state.myName = ''
+      state.theirName = ''
+      state.gameName = ''
+      state.boats = []
+      state.totalScore = 0
+      state.maxMoves = 40
+      state.gameState = []
+      state.result = {}
+    },
     updateGameName: (state, payload) => {
       state.gameName = payload
     },
@@ -152,6 +160,9 @@ export const store = new Vuex.Store({
     },
     loadGame: ({ commit }, payload) => {
       commit('loadGame', payload)
+    },
+    gameDeleted: ({ commit }, payload) => {
+      commit('gameDeleted', payload)
     },
     updateGameName: ({ commit }, payload) => {
       commit('updateGameName', payload)

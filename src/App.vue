@@ -51,6 +51,7 @@
 <script>
 import bus from './socket.js'
 
+import ls from './lib/localStorage.js'
 import params from './lib/params.js'
 
 import Header from './components/Header.vue'
@@ -85,6 +86,9 @@ export default {
     },
     showAbout() {
       return this.$store.getters.getShowAbout
+    },
+    lsSuffix() {
+      return this.$store.getters.lsSuffix
     },
     myName() {
       return this.$store.getters.getMyName
@@ -132,6 +136,13 @@ export default {
     bus.$on('loadGame', (data) => {
       if (this.gameName == data.gameName) {
         this.$store.dispatch('loadGame', data)
+      }
+    })
+
+    bus.$on('gameDeleted', (data) => {
+      if (this.gameName == data.gameName) {
+        ls.clear(this.lsSuffix)
+        this.$store.dispatch('gameDeleted')
       }
     })
 

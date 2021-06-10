@@ -48,10 +48,10 @@
           Score: {{ score() }}/{{ totalScore }}
         </h3>
         <div v-for="(boat, b) in boats" :key="b" class="place" :class="{ 'selected': selectedBoat.name == boat.name, 'rounded-top': b == 0, 'rounded-bottom': b == boats.length- 1}">
-          <button class="btn btn-sm btn-secondary smaller-font horizontal" @click="selectBoat(boat, 'horizontal')" :disabled="gameStarted()" :title="'Place ' + boat.name + ' horizontally'">
+          <button class="btn btn-sm btn-secondary smaller-font horizontal" @click="selectBoat(boat, 'horizontal')" :disabled="gameStarted" :title="'Place ' + boat.name + ' horizontally'">
             &#x2192;
           </button>
-          <button class="btn btn-sm btn-secondary smaller-font vertical" @click="selectBoat(boat, 'vertical')" :disabled="gameStarted()" :title="'Place ' + boat.name + ' vertically'">
+          <button class="btn btn-sm btn-secondary smaller-font vertical" @click="selectBoat(boat, 'vertical')" :disabled="gameStarted" :title="'Place ' + boat.name + ' vertically'">
             &#x2193;
           </button>
           <div class="boat" :class="boat.name" />
@@ -106,6 +106,9 @@ export default {
     },
     gameState() {
       return this.$store.getters.getGameState
+    },
+    gameStarted() {
+      return this.$store.getters.getGameStarted
     }
   },
   methods: {
@@ -153,9 +156,6 @@ export default {
         const moves = game.theirMoves(this.gameState, this.myName)
         return board.hitOrMiss(r, c, moves, false, this.result)
       }
-    },
-    gameStarted() {
-      return this.gameState[0].moves.length > 0 || this.gameState[1].moves.length > 0
     },
     place(r, c) {
       const myBoard = game.myBoard(this.gameState, this.myName).board

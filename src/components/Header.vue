@@ -20,7 +20,7 @@
         Agile Battleships
         <span v-if="gameName">- Game: {{ gameName }}</span>
         <i v-if="gameName" title="Restart Game" @click="restartGame()" class="fas fa-undo-alt" />
-        <i v-if="gameName" title="Delete My Details" @click="deleteMyDetails()" class="fas fa-trash-alt" />
+        <i v-if="gameName" title="Delete Game" @click="deleteGame()" class="fas fa-trash-alt" />
       </h1>
       <ul class="navbar-nav ml-auto">
         <li class="nav-item" :class="{ active: !showAbout }">
@@ -64,7 +64,6 @@
 <script>
 import bus from '../socket.js'
 
-import ls from '../lib/localStorage.js'
 import mailFuns from '../lib/mail.js'
 
 export default {
@@ -116,10 +115,9 @@ export default {
         bus.$emit('sendRestartGame', {gameName: this.gameName})
       }
     },
-    deleteMyDetails() {
-      if (confirm('Delete your game details?')) {
-        ls.clear(this.lsSuffix)
-        bus.$emit('sendClearDetails', {gameName: this.gameName, myName: this.myName})
+    deleteGame() {
+      if (confirm('Delete this game?')) {
+        bus.$emit('sendDeleteGame', {gameName: this.gameName})
       }
     }
   },
