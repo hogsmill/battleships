@@ -202,6 +202,7 @@ export default {
 
     &.next-go {
       background-color: darkgreen;
+      margin-right: 12px;
     }
   }
 
