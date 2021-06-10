@@ -144,8 +144,12 @@ module.exports = {
             data.player.board = []
             data.player.moves = []
             data.player.score = 0
+            data.player.nextGo = false
             gameState.push(data.player)
           }
+        }
+        if (gameState.length == 2 && !gameState[0].nextGo && !gameState[1].nextGo) {
+          gameState[0].nextGo = true
         }
         data.gameState = gameState
         io.emit('updateGameState', data)
@@ -253,6 +257,7 @@ module.exports = {
           gameState.push(player)
         }
         data.gameState = gameState
+
         io.emit('updateGameState', data)
         db.gameCollection.updateOne({'_id': res._id}, {$set: {gameState: data.gameState}}, function(err, rec) {
           if (err) throw err
@@ -286,8 +291,15 @@ module.exports = {
           io.emit('gameOver', data)
         }
         data.gameState = gameState
+        if (data.gameState[0].nextGo) {
+          data.gameState[0].nextGo = false
+          data.gameState[1].nextGo = true
+        } else {
+          data.gameState[1].nextGo = false
+          data.gameState[0].nextGo = true
+        }
         io.emit('updateGameState', data)
-        db.gameCollection.updateOne({'_id': res._id}, {$set: {gameState: data.gameState}}, function(err, rec) {
+        db.gameCollection.updateOne({'_id': res._id}, {$set: {gameState: data.gameState, nextPlayer: data.nextPlayer}}, function(err, rec) {
           if (err) throw err
         })
       }

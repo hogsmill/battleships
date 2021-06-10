@@ -10,10 +10,11 @@
         Current server connections: {{ connections.connections }} / {{ connections.maxConnections }}
       </div>
       <div class="names">
-        <GameName />
-        <MyName />
-        <OtherName />
-        <Agile />
+        <GameName v-if="!gameSet" />
+        <MyName v-if="!gameSet" />
+        <OtherName v-if="!gameSet" />
+        <Agile v-if="!gameSet" />
+        <HeaderString v-if="gameSet" />
       </div>
       <div class="container">
         <div class="row">
@@ -59,6 +60,7 @@ import WalkThroughView from './components/about/WalkThroughView.vue'
 import GameName from './components/GameName.vue'
 import MyName from './components/MyName.vue'
 import OtherName from './components/OtherName.vue'
+import HeaderString from './components/HeaderString.vue'
 import Agile from './components/Agile.vue'
 import Moves from './components/Moves.vue'
 import Board from './components/Board.vue'
@@ -73,6 +75,7 @@ export default {
     MyName,
     OtherName,
     Agile,
+    HeaderString,
     Moves,
     Board
   },
@@ -139,7 +142,6 @@ export default {
     })
 
     bus.$on('updateGameState', (data) => {
-      console.log(data)
       if (this.gameName == data.gameName) {
         this.$store.dispatch('updateGameState', data)
       }

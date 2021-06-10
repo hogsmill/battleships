@@ -3,6 +3,10 @@ import Vuex from 'vuex'
 
 Vue.use(Vuex)
 
+function agileSet(state) {
+  return state.gameState.length == 2 && state.gameState[0].agile
+}
+
 export const store = new Vuex.Store({
   state: {
     thisGame: 'Agile Battleships',
@@ -38,11 +42,21 @@ export const store = new Vuex.Store({
     getMyName: (state) => {
       return state.myName
     },
+    getMyPlayer: (state) => {
+      return state.gameState.find((p) => {
+        return p.id == state.myName.id
+      })
+    },
     getTheirName: (state) => {
       return state.theirName
     },
+    getGameSet: (state) => {
+      return state.gameName && state.myName && agileSet(state)
+    },
+    getAgileSet: (state) => {
+      return agileSet(state)
+    },
     getGameName: (state) => {
-      console.log(state)
       return state.gameName
     },
     getGameStarted: (state) => {

@@ -24,7 +24,7 @@
       </h1>
       <ul class="navbar-nav ml-auto">
         <li class="nav-item" :class="{ active: !showAbout }">
-          <a class="nav-link pointer" @click="updateShowAbout(false)">Simulation</a>
+          <a class="nav-link pointer" @click="updateShowAbout(false)">Game</a>
         </li>
         <li class="nav-item" :class="{ active: showAbout }">
           <a class="nav-link pointer" @click="updateShowAbout(true)">About</a>

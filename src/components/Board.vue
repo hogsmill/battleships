@@ -2,8 +2,8 @@
   <table v-if="gameSet">
     <tr>
       <td>
-        <h3 :class="{'no-header': !theirName}">
-          {{ theirName.name }}'s Board
+        <h3 :class="{ 'no-header': !theirName, 'next-go': theirName.nextGo }">
+          {{ theirName.name }}'s Board <i v-if="theirName.nextGo" :title="theirName.name + 's go next'" class="fas fa-check-circle" />
         </h3>
         <table class="board their-board">
           <tr>
@@ -23,7 +23,9 @@
         </table>
       </td>
       <td>
-        <h3>My Board</h3>
+        <h3 :class="{ 'next-go': myPlayer.nextGo }">
+          My Board <i v-if="myPlayer.nextGo" title="My go next" class="fas fa-check-circle" />
+        </h3>
         <table class="board my-board">
           <tr>
             <td class="header" />
@@ -42,8 +44,10 @@
         </table>
       </td>
       <td>
-        <h3>Score: {{ score() }}/{{ totalScore }}</h3>
-        <div v-for="(boat, b) in boats" :key="b" class="place" :class="{selected: selectedBoat.name == boat.name}">
+        <h3>
+          Score: {{ score() }}/{{ totalScore }}
+        </h3>
+        <div v-for="(boat, b) in boats" :key="b" class="place" :class="{ 'selected': selectedBoat.name == boat.name, 'rounded-top': b == 0, 'rounded-bottom': b == boats.length- 1}">
           <button class="btn btn-sm btn-secondary smaller-font horizontal" @click="selectBoat(boat, 'horizontal')" :disabled="gameStarted()" :title="'Place ' + boat.name + ' horizontally'">
             &#x2192;
           </button>
@@ -75,6 +79,9 @@ export default {
   computed: {
     myName() {
       return this.$store.getters.getMyName
+    },
+    myPlayer() {
+      return this.$store.getters.getMyPlayer
     },
     theirName() {
       return this.$store.getters.getTheirName
@@ -115,11 +122,13 @@ export default {
       }
     },
     makeMove(r, c) {
-      const moves = game.myBoard(this.gameState, this.myName).moves.length
-      if (moves >= this.maxMoves) {
-        alert('You have no more moves')
-      } else {
-        bus.$emit('sendMakeMove', {gameName: this.gameName, name: this.myName, row: r, column: c})
+      if (this.myPlayer.nextGo) {
+        const moves = game.myBoard(this.gameState, this.myName).moves.length
+        if (moves >= this.maxMoves) {
+          alert('You have no more moves')
+        } else {
+          bus.$emit('sendMakeMove', {gameName: this.gameName, name: this.myName, row: r, column: c})
+        }
       }
     },
     myCellClass(r, c) {
@@ -186,6 +195,14 @@ export default {
 
   .no-header {
     color: #fff;
+  }
+
+  h3 {
+    border-radius: 6px;
+
+    &.next-go {
+      background-color: darkgreen;
+    }
   }
 
   table.board {
