@@ -45,7 +45,7 @@
       </td>
       <td>
         <h3>
-          Score: {{ score() }}/{{ totalScore }}
+          Score: {{ score() }}/{{ totalScore }} {{ gameStarted }}
         </h3>
         <div v-for="(boat, b) in boats" :key="b" class="place" :class="{ 'selected': selectedBoat.name == boat.name, 'rounded-top': b == 0, 'rounded-bottom': b == boats.length- 1}">
           <button class="btn btn-sm btn-secondary smaller-font horizontal" @click="selectBoat(boat, 'horizontal')" :disabled="gameStarted" :title="'Place ' + boat.name + ' horizontally'">
@@ -102,7 +102,10 @@ export default {
       return this.$store.getters.getResult
     },
     gameSet() {
-      return this.$store.getters.gameSet
+      return this.$store.getters.getGameSet
+    },
+    gameReady() {
+      return this.$store.getters.getGameReady
     },
     gameState() {
       return this.$store.getters.getGameState
@@ -125,7 +128,11 @@ export default {
       }
     },
     makeMove(r, c) {
-      if (this.myPlayer.nextGo) {
+      if (!this.gameReady) {
+        alert('Game not ready to start - someone hasn\'t placed all their boats')
+      } else if (!this.myPlayer.nextGo){
+        alert('It\'s is not your go...')
+      } else {
         const moves = game.myBoard(this.gameState, this.myName).moves.length
         if (moves >= this.maxMoves) {
           alert('You have no more moves')

@@ -107,10 +107,11 @@ module.exports = {
           player.board = []
           player.moves = []
           player.score = 0
+          delete player.agile
           player.nextGo = i == 0 ? true : false
           players.push(player)
         }
-        data.gameState = gameState
+        data.gameState = players
         io.emit('updateGameState', data)
         db.gameCollection.updateOne({'_id': res._id}, {$set: {gameState: data.gameState}}, function(err, rec) {
           if (err) throw err

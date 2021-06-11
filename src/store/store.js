@@ -4,7 +4,6 @@ import Vuex from 'vuex'
 Vue.use(Vuex)
 
 function agileSet(state) {
-  console.log(state.gameState[0])
   return state.gameState.length == 2 && Object.keys(state.gameState[0]).find((k) => {
     return k == 'agile'
   })
@@ -55,6 +54,9 @@ export const store = new Vuex.Store({
     getGameSet: (state) => {
       return state.gameName && state.myName && agileSet(state)
     },
+    getGameReady: (state) => {
+      return state.gameState.length == 2 && state.gameState[0].board.length == 5 && state.gameState[1].board.length == 5
+    },
     getAgileSet: (state) => {
       return agileSet(state)
     },
@@ -62,7 +64,7 @@ export const store = new Vuex.Store({
       return state.gameName
     },
     getGameStarted: (state) => {
-      return state.gameState.length == 2 && (state.gameState[0].moves.length || state.gameState[1].moves.length)
+      return state.gameState.length == 2 && (state.gameState[0].moves.length > 0 || state.gameState[1].moves.length > 0)
     },
     getBoats: (state) => {
       return state.boats
