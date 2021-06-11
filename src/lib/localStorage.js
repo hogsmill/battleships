@@ -26,7 +26,6 @@ const LocalStorage = {
     ]
     for (let i = 0; i < items.length; i++) {
       const key = items[i] + '-' + suffix
-      console.log('deleting', key)
       localStorage.removeItem(key)
     }
     location.reload()
