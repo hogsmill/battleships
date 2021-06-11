@@ -1,12 +1,8 @@
 <template>
   <div class="who-is-agile">
-    <button class="btn btn-sm btn-secondary smaller-font" v-if="gameState.length >= 2 && !agileSet" @click="setAgile()">
+    <button v-if="gameState.length >= 2 && !agileSet" class="name btn btn-primary" @click="setAgile()">
       Who is Agile?
     </button>
-    <!--
-    <span v-if="agileSet && iAmAgile()" class="rounded mr-2 mt-2 pointer p-2 bg-light">I am Agile</span>
-    <span v-if="agileSet && iAmNotAgile()" class="rounded mr-2 mt-2 pointer p-2 bg-light">I am not Agile</span>
-    -->
   </div>
 </template>
 
@@ -47,7 +43,7 @@ export default {
 <style lang="scss">
 
   .who-is-agile {
-    width: 125px;
+    width: 140px;
     display: inline-block;
   }
 

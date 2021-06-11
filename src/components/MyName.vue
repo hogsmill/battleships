@@ -1,9 +1,9 @@
 <template>
   <div class="my-name" v-if="!showAbout">
-    <button class="btn btn-primary" v-if="!myName" :disabled="gameStarted" @click="show">
+    <button class="btn btn-primary" :class="{ 'name-set': gameName }" :disabled="gameStarted" @click="show">
       Set My Name
     </button>
-    <span v-if="myName" @click="show" class="rounded mr-2 mt-2 pointer p-2 bg-light">I am: {{ myName.name }}</span>
+    <span v-if="myName" class="my-name-info">({{ myName.name }})</span>
 
     <modal name="set-my-name" :height="120" :classes="['rounded', 'set-my-name']">
       <div class="mr-2 mt-1">
@@ -77,13 +77,16 @@ export default {
 .my-name {
   width: 150px;
   display: inline-block;
+  vertical-align: top;
 
-  .cross {
-    color: red;
+  .name-set {
+    background-color: #f8f9fa;
+    color: #2c3e50;
+  }
 
-    &:hover {
-      cursor: pointer;
-    }
+  .my-name-info {
+    color: #fff;
+    font-style: italic;
   }
 }
 

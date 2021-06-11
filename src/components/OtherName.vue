@@ -2,8 +2,11 @@
   <div class="other-name" v-if="!showAbout">
     <div v-if="myName && !theirName" class="need-other">
       <i>You now need to get another player to join the same game...</i>
+      <i class="fas fa-question-circle" title="Both players need to set the same game to play" />
     </div>
-    <span v-if="gameSet" class="rounded mr-2 mt-2 pointer p-2 bg-light">I am playing: {{ theirName.name }}</span>
+    <div v-if="myName && theirName" class="playing">
+      I am playing {{ theirName.name }}
+    </div>
   </div>
 </template>
 
@@ -36,13 +39,24 @@ export default {
   .other-name {
     width: 200px;
     display: inline-block;
+    vertical-align: top;
 
-    .need-other {
-      position: relative;
-      top: 12px;
-      width: 245px;
+    .need-other, .playing {
+      width: 255px;
       color: #fff;
       font-weight: bold;
+
+      .fas {
+        margin-left: 6px;
+        color: gold;
+      }
+    }
+
+    .playing {
+      font-style: italic;
+      color: #fff;
+      padding: 12px 0 0 30px;
+      text-align: left;
     }
   }
 </style>

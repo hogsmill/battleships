@@ -1,8 +1,9 @@
 <template>
   <div class="game-name" v-if="!showAbout">
-    <button class="name btn btn-primary" :disabled="gameStarted" @click="show">
+    <button class="name btn btn-primary" :class="{ 'game-set': gameName }" :disabled="gameStarted" @click="show">
       Set Game Name
     </button>
+    <span v-if="gameName" class="game-name-info">({{ gameName }})</span>
 
     <modal name="set-game-name" :height="120" :classes="['rounded', 'set-game-name']">
       <div class="mr-2 mt-1">
@@ -61,6 +62,17 @@ export default {
 .game-name {
   width: 200px;
   display: inline-block;
+  vertical-align: top;
+
+  .game-set {
+    background-color: #f8f9fa;
+    color: #2c3e50;
+  }
+
+  .game-name-info {
+    color: #fff;
+    font-style: italic;
+  }
 }
 .set-game-name {
 
