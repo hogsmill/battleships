@@ -1,12 +1,5 @@
 <template>
   <div>
-    <button
-      v-if="walkThrough && !showAbout"
-      class="btn btn-sm btn-info"
-      @click="help"
-    >
-      Explain this for me...
-    </button>
     <modal name="walk-through" id="walk-through" :height="400" :classes="['rounded']">
       <div class="float-right mr-2 mt-1">
         <button type="button" class="close" @click="hide" aria-label="Close">
