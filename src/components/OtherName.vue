@@ -1,6 +1,8 @@
 <template>
   <div class="other-name" v-if="!showAbout">
-    <div v-if="myName && !theirName" class="need-other"><i>You now need to get another player to join the same game...</i></div>
+    <div v-if="myName && !theirName" class="need-other">
+      <i>You now need to get another player to join the same game...</i>
+    </div>
     <span v-if="gameSet" class="rounded mr-2 mt-2 pointer p-2 bg-light">I am playing: {{ theirName.name }}</span>
   </div>
 </template>
