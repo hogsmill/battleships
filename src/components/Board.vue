@@ -45,9 +45,9 @@
       </td>
       <td>
         <h3>
-          Score: {{ score() }}/{{ totalScore }} {{ gameStarted }}
+          Score: {{ score() }}/{{ totalScore }}
         </h3>
-        <div v-for="(boat, b) in boats" :key="b" class="place" :class="{ 'selected': selectedBoat.name == boat.name, 'rounded-top': b == 0, 'rounded-bottom': b == boats.length- 1}">
+        <div v-for="(boat, b) in boats" :key="b" class="place" :class="{ 'placed': placed(boat), 'selected': selectedBoat.name == boat.name, 'rounded-top': b == 0, 'rounded-bottom': b == boats.length- 1}">
           <button class="btn btn-sm btn-secondary smaller-font horizontal" @click="selectBoat(boat, 'horizontal')" :disabled="gameStarted" :title="'Place ' + boat.name + ' horizontally'">
             &#x2192;
           </button>
@@ -115,8 +115,13 @@ export default {
     }
   },
   methods: {
+    placed(boat) {
+      return game.myBoard(this.gameState, this.myName).board.find((b) => {
+        return b.boat.name == boat.name
+      })
+    },
     score() {
-      return document.getElementsByClassName('hit').length
+      return game.myBoard(this.gameState, this.myName).score
     },
     selectBoat(boat, orientation) {
       this.selectedBoat = boat
@@ -260,9 +265,14 @@ export default {
     border: 2px solid #fff;
     background-color: #fff;
 
+    &.placed {
+      opacity: 0.4;
+    }
+
     &.selected {
       border-color: red;
     }
+
     button {
       display: inline-block;
       width: 36px;
