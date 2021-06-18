@@ -45,7 +45,7 @@
       </td>
       <td>
         <h3>
-          Score: {{ agile() ? score() : '?' }}/{{ totalScore }}
+          Score: {{ agile() || result.win ? score() : '?' }}/{{ totalScore }}
         </h3>
         <div v-for="(boat, b) in boats" :key="b" class="place" :class="{ 'placed': placed(boat), 'selected': selectedBoat.name == boat.name, 'rounded-top': b == 0, 'rounded-bottom': b == boats.length- 1}">
           <button class="btn btn-sm btn-secondary smaller-font horizontal" @click="selectBoat(boat, 'horizontal')" :disabled="gameStarted" :title="'Place ' + boat.name + ' horizontally'">
