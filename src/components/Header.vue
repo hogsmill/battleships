@@ -23,11 +23,16 @@
         <i v-if="gameName" title="Delete Game" @click="deleteGame()" class="fas fa-trash-alt" />
       </h1>
       <ul class="navbar-nav ml-auto">
-        <li class="nav-item" :class="{ active: !showAbout }">
-          <a class="nav-link pointer" @click="updateShowAbout(false)">Game</a>
+        <li class="nav-item" :class="{ active: currentTab == 'game' }">
+          <a class="nav-link pointer" @click="setTab('game')">Game</a>
         </li>
-        <li class="nav-item" :class="{ active: showAbout }">
-          <a class="nav-link pointer" @click="updateShowAbout(true)">About</a>
+        <!--
+        <li class="nav-item" :class="{ active: currentTab == 'results' }">
+          <a class="nav-link pointer" @click="setTab('results')">Results</a>
+        </li>
+        -->
+        <li class="nav-item" :class="{ active: currentTab == 'about' }">
+          <a class="nav-link pointer" @click="setTab('about')">About</a>
         </li>
         <li class="nav-item">
           <a class="nav-link pointer" @click="show()">Feedback</a>
@@ -68,21 +73,15 @@ import mailFuns from '../lib/mail.js'
 
 export default {
   computed: {
-    lsSuffix() {
-      return this.$store.getters.lsSuffix
+    currentTab() {
+      return this.$store.getters.getCurrentTab
     },
     thisGame() {
       return this.$store.getters.thisGame
     },
     gameName() {
       return this.$store.getters.getGameName
-    },
-    myName() {
-      return this.$store.getters.getMyName
-    },
-    showAbout() {
-      return this.$store.getters.getShowAbout
-    },
+    }
   },
   created() {
     if (location.search == '?host') {
@@ -90,8 +89,8 @@ export default {
     }
   },
   methods: {
-    updateShowAbout(payload) {
-      this.$store.dispatch('updateShowAbout', payload)
+    setTab(payload) {
+      this.$store.dispatch('updateTab', payload)
     },
     show () {
       this.$modal.show('feedback')

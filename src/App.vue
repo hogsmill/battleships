@@ -2,10 +2,10 @@
   <div id="app" class="mb-4">
     <appHeader />
     <WalkThroughView />
-    <div v-if="showAbout">
+    <div v-if="currentTab == 'about'">
       <AboutView />
     </div>
-    <div v-if="!showAbout" class="main">
+    <div v-if="currentTab == 'game'" class="main">
       <div v-if="isHost" class="connections">
         Current server connections: {{ connections.connections }} / {{ connections.maxConnections }}
       </div>
@@ -22,7 +22,10 @@
           <Board />
         </div>
       </div>
-      <div v-if="!showAbout && !gameName" class="ship" />
+      <div v-if="currentTab == 'game' && !gameName" class="ship" />
+    </div>
+    <div v-if="currentTab == 'results'">
+      <Results />
     </div>
 
     <modal name="game-over" :height="150" :classes="['rounded', 'game-over']">
@@ -58,6 +61,7 @@ import Header from './components/Header.vue'
 import AboutView from './components/about/AboutView.vue'
 import WalkThroughView from './components/about/WalkThroughView.vue'
 
+import Results from './components/Results.vue'
 import GameName from './components/GameName.vue'
 import MyName from './components/MyName.vue'
 import OtherName from './components/OtherName.vue'
@@ -71,6 +75,7 @@ export default {
   components: {
     appHeader: Header,
     AboutView,
+    Results,
     WalkThroughView,
     GameName,
     MyName,
@@ -84,8 +89,8 @@ export default {
     isHost() {
       return this.$store.getters.getHost
     },
-    showAbout() {
-      return this.$store.getters.getShowAbout
+    currentTab() {
+      return this.$store.getters.getCurrentTab
     },
     lsSuffix() {
       return this.$store.getters.lsSuffix
@@ -167,7 +172,7 @@ export default {
     bus.$on('gameOver', (data) => {
       if (this.gameName == data.gameName) {
         this.$store.dispatch('gameOver', data)
-        self.show()
+        this.show()
       }
     })
 
@@ -184,7 +189,7 @@ export default {
     },
     getScore() {
       let result = ''
-      if (this.gemeSet) {
+      if (this.gameSet) {
         const score0 = this.gameState[0].score
         const score1 = this.gameState[1].score
         let winner, loser
@@ -217,9 +222,6 @@ export default {
     min-height: 700px;
   }
 
-  h1, h3 {
-    color: #fff;
-  }
   .connections {
     text-align: right;
     padding-right: 6px;

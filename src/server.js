@@ -96,6 +96,8 @@ MongoClient.connect(url, { useUnifiedTopology: true, maxIdleTimeMS: maxIdleTime 
       emit('updateConnections', {connections: connections, maxConnections: maxConnections})
     })
 
+    socket.on('sendLoadResults', (data) => { dbStore.loadResults(db, io, data, debugOn) })
+
     socket.on('sendLoadGame', (data) => { dbStore.loadGame(db, io, data, debugOn) })
 
     socket.on('sendDeleteGame', (data) => { dbStore.deleteGame(db, io, data, debugOn) })

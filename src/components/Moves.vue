@@ -58,7 +58,8 @@ export default {
     height: 24px;
     background-color: #ddd;
     border-radius: 12px;
-
+    margin-bottom: 6px;
+    
     .moves-done {
       border-radius: 12px;
       background-color: cadetblue;

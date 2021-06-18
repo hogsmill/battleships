@@ -54,10 +54,10 @@ function gameOver(game) {
     over = {win: true, allMovesDone: true}
   }
   if (game.gameState[0].score == game.totalScore) {
-    over = {win: true, player: 0}
+    over = {win: true, player: 0, agile: game.gameState[0].agile == 'yes'}
   }
   if (game.gameState[1].score == game.totalScore) {
-    over = {win: true, player: 1}
+    over = {win: true, player: 1, agile: game.gameState[1].agile == 'yes'}
   }
   return over
 }
@@ -86,6 +86,31 @@ function _loadGame(db, io, data, debugOn) {
 }
 
 module.exports = {
+
+  loadResults: function(db, io, data, debugOn) {
+
+    if (debugOn) { console.log('loadResults') }
+
+    db.gameCollection.find().toArray(function(err, res) {
+      if (err) throw err
+      if (res.length) {
+        const results = []
+        for (let i = 0; i < res.length; i++) {
+          players = []
+          for (let j = 0; j < res[i].gameState.length; j++) {
+            players.push(res[i].gameState[j].name)
+          }
+          results.push({
+            gameName: res[i].gameName,
+            players: players,
+            result: res[i].result
+          })
+        }
+        io.emit('loadResults', results)
+      }
+    })
+
+  },
 
   loadGame: function(db, io, data, debugOn) {
 
@@ -277,35 +302,40 @@ module.exports = {
     db.gameCollection.findOne({gameName: data.gameName}, function(err, res) {
       if (err) throw err
       if (res) {
-        let player
-        const gameState = []
-        for (let i = 0; i < res.gameState.length; i++) {
-          player = res.gameState[i]
-          if (player.id == data.name.id) {
-            const hit = hitOrMiss(data, i, res.gameState)
-            if (hit) {
-              player.score = player.score + 1
-            }
-            player.moves.push({row: data.row, column: data.column, hit: hit})
-          }
-          gameState.push(player)
-        }
         data.result = gameOver(res)
+        console.log(data.result)
         if (data.result.win) {
           io.emit('gameOver', data)
-        }
-        data.gameState = gameState
-        if (data.gameState[0].nextGo) {
-          data.gameState[0].nextGo = false
-          data.gameState[1].nextGo = true
+          db.gameCollection.updateOne({'_id': res._id}, {$set: {result: data.result}}, function(err, rec) {
+            if (err) throw err
+          })
         } else {
-          data.gameState[1].nextGo = false
-          data.gameState[0].nextGo = true
+          let player
+          const gameState = []
+          for (let i = 0; i < res.gameState.length; i++) {
+            player = res.gameState[i]
+            if (player.id == data.name.id) {
+              const hit = hitOrMiss(data, i, res.gameState)
+              if (hit) {
+                player.score = player.score + 1
+              }
+              player.moves.push({row: data.row, column: data.column, hit: hit})
+            }
+            gameState.push(player)
+          }
+          data.gameState = gameState
+          if (data.gameState[0].nextGo) {
+            data.gameState[0].nextGo = false
+            data.gameState[1].nextGo = true
+          } else {
+            data.gameState[1].nextGo = false
+            data.gameState[0].nextGo = true
+          }
+          io.emit('updateGameState', data)
+          db.gameCollection.updateOne({'_id': res._id}, {$set: {gameState: data.gameState, nextPlayer: data.nextPlayer, result: data.result}}, function(err, rec) {
+            if (err) throw err
+          })
         }
-        io.emit('updateGameState', data)
-        db.gameCollection.updateOne({'_id': res._id}, {$set: {gameState: data.gameState, nextPlayer: data.nextPlayer}}, function(err, rec) {
-          if (err) throw err
-        })
       }
     })
   }

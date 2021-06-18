@@ -13,7 +13,7 @@ export const store = new Vuex.Store({
   state: {
     thisGame: 'Agile Battleships',
     connections: 0,
-    showAbout: false,
+    currentTab: 'game',
     walkThrough: false,
     myName: '',
     theirName: '',
@@ -22,7 +22,8 @@ export const store = new Vuex.Store({
     totalScore: 0,
     maxMoves: 40,
     gameState: [],
-    result: {}
+    result: {},
+    results: []
   },
   getters: {
     thisGame: (state) => {
@@ -34,11 +35,14 @@ export const store = new Vuex.Store({
     getHost: (state) => {
       return state.host
     },
-    getShowAbout: (state) => {
-      return state.showAbout
+    getCurrentTab: (state) => {
+      return state.currentTab
     },
     getWalkThrough: (state) => {
       return state.walkThrough
+    },
+    getResults: (state) => {
+      return state.results
     },
     getMyName: (state) => {
       return state.myName
@@ -55,6 +59,7 @@ export const store = new Vuex.Store({
       return state.gameName && state.myName && agileSet(state)
     },
     getGameReady: (state) => {
+      console.log(state)
       return state.gameState.length == 2 && state.gameState[0].board.length == 5 && state.gameState[1].board.length == 5
     },
     getAgileSet: (state) => {
@@ -92,8 +97,8 @@ export const store = new Vuex.Store({
     updateHost: (state, payload) => {
       state.host = payload
     },
-    updateShowAbout: (state, payload) => {
-      state.showAbout = payload
+    updateTab: (state, payload) => {
+      state.currentTab = payload
     },
     updateWalkThrough: (state, payload) => {
       state.walkThrough = payload
@@ -118,6 +123,9 @@ export const store = new Vuex.Store({
       if (state.theirName.id == payload.player.id) {
         state.theirName = ''
       }
+    },
+    loadResults: (state, payload) => {
+      state.results = payload
     },
     loadGame: (state, payload) => {
       state.boats = payload.boats
@@ -148,8 +156,8 @@ export const store = new Vuex.Store({
     updateHost: ({ commit }, payload) => {
       commit('updateHost', payload)
     },
-    updateShowAbout: ({ commit }, payload) => {
-      commit('updateShowAbout', payload)
+    updateTab: ({ commit }, payload) => {
+      commit('updateTab', payload)
     },
     updateWalkThrough: ({ commit }, payload) => {
       commit('updateWalkThrough', payload)
@@ -162,6 +170,9 @@ export const store = new Vuex.Store({
     },
     removePlayer: ({ commit }, payload) => {
       commit('removePlayer', payload)
+    },
+    loadResults: ({ commit }, payload) => {
+      commit('loadResults', payload)
     },
     loadGame: ({ commit }, payload) => {
       commit('loadGame', payload)

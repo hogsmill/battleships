@@ -46,6 +46,10 @@ export default {
 <style lang="scss">
   .header-string {
 
+    h1, h3 {
+      color: #fff;
+    }
+    
     .fa-smile-beam {
       color: palegreen;
     }
