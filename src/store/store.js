@@ -23,7 +23,9 @@ export const store = new Vuex.Store({
     maxMoves: 40,
     gameState: [],
     result: {},
-    results: []
+    results: [],
+    games: [],
+    watchingGame: {}
   },
   getters: {
     thisGame: (state) => {
@@ -40,6 +42,9 @@ export const store = new Vuex.Store({
     },
     getWalkThrough: (state) => {
       return state.walkThrough
+    },
+    getGames: (state) => {
+      return state.games
     },
     getResults: (state) => {
       return state.results
@@ -59,7 +64,6 @@ export const store = new Vuex.Store({
       return state.gameName && state.myName && agileSet(state)
     },
     getGameReady: (state) => {
-      console.log(state)
       return state.gameState.length == 2 && state.gameState[0].board.length == 5 && state.gameState[1].board.length == 5
     },
     getAgileSet: (state) => {
@@ -88,6 +92,9 @@ export const store = new Vuex.Store({
     },
     getResult: (state) => {
       return state.result
+    },
+    getWatchingGame: (state) => {
+      return state.watchingGame
     },
     getConnections: (state) => {
       return state.connections
@@ -127,6 +134,9 @@ export const store = new Vuex.Store({
     loadResults: (state, payload) => {
       state.results = payload
     },
+    loadGames: (state, payload) => {
+      state.games = payload.games
+    },
     loadGame: (state, payload) => {
       state.boats = payload.boats
       state.totalScore = payload.totalScore
@@ -147,6 +157,9 @@ export const store = new Vuex.Store({
     },
     gameOver: (state, payload) => {
       state.result = payload.result
+    },
+    setWatchingGame: (state, payload) => {
+      state.watchingGame = payload.game
     },
     updateConnections: (state, payload) => {
       state.connections = payload
@@ -174,6 +187,9 @@ export const store = new Vuex.Store({
     loadResults: ({ commit }, payload) => {
       commit('loadResults', payload)
     },
+    loadGames: ({ commit }, payload) => {
+      commit('loadGames', payload)
+    },
     loadGame: ({ commit }, payload) => {
       commit('loadGame', payload)
     },
@@ -185,6 +201,9 @@ export const store = new Vuex.Store({
     },
     gameOver: ({ commit }, payload) => {
       commit('gameOver', payload)
+    },
+    setWatchingGame: ({ commit }, payload) => {
+      commit('setWatchingGame', payload)
     },
     updateConnections: ({ commit }, payload) => {
       commit('updateConnections', payload)

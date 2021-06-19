@@ -112,6 +112,18 @@ module.exports = {
 
   },
 
+  loadGames: function(db, io, debugOn) {
+
+    if (debugOn) { console.log('loadGames') }
+
+    db.gameCollection.find().toArray(function(err, res) {
+      if (err) throw err
+      if (res.length) {
+        io.emit('loadGames', {games: res})
+      }
+    })
+  },
+
   loadGame: function(db, io, data, debugOn) {
 
     if (debugOn) { console.log('loadGame', data) }
@@ -303,11 +315,16 @@ module.exports = {
       if (err) throw err
       if (res) {
         data.result = gameOver(res)
-        console.log(data.result)
         if (data.result.win) {
           io.emit('gameOver', data)
           db.gameCollection.updateOne({'_id': res._id}, {$set: {result: data.result}}, function(err, rec) {
             if (err) throw err
+            db.gameCollection.findOne({gameName: data.gameName}, function(err, res) {
+              if (err) throw err
+              if (res) {
+                io.emit('updateWatchingGame', {game: res})
+              }
+            })
           })
         } else {
           let player
@@ -334,6 +351,12 @@ module.exports = {
           io.emit('updateGameState', data)
           db.gameCollection.updateOne({'_id': res._id}, {$set: {gameState: data.gameState, nextPlayer: data.nextPlayer, result: data.result}}, function(err, rec) {
             if (err) throw err
+            db.gameCollection.findOne({gameName: data.gameName}, function(err, res) {
+              if (err) throw err
+              if (res) {
+                io.emit('updateWatchingGame', {game: res})
+              }
+            })
           })
         }
       }

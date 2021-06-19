@@ -24,9 +24,8 @@
       </div>
       <div v-if="currentTab == 'game' && !gameName" class="ship" />
     </div>
-    <div v-if="currentTab == 'results'">
-      <Results />
-    </div>
+    <GameWatch v-if="currentTab == 'gameWatch'" />
+    <Results v-if="currentTab == 'results'" />
 
     <modal name="game-over" :height="150" :classes="['rounded', 'game-over']">
       <div class="mr-2 mt-1">
@@ -69,6 +68,7 @@ import HeaderString from './components/HeaderString.vue'
 import Agile from './components/Agile.vue'
 import Moves from './components/Moves.vue'
 import Board from './components/Board.vue'
+import GameWatch from './components/GameWatch.vue'
 
 export default {
   name: 'App',
@@ -83,7 +83,8 @@ export default {
     Agile,
     HeaderString,
     Moves,
-    Board
+    Board,
+    GameWatch
   },
   computed: {
     isHost() {

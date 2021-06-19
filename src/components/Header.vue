@@ -26,11 +26,12 @@
         <li class="nav-item" :class="{ active: currentTab == 'game' }">
           <a class="nav-link pointer" @click="setTab('game')">Game</a>
         </li>
-        <!--
+        <li v-if="!gameSet" class="nav-item" :class="{ active: currentTab == 'gameWatch' }">
+          <a class="nav-link pointer" @click="setTab('gameWatch')">Watch Game</a>
+        </li>
         <li class="nav-item" :class="{ active: currentTab == 'results' }">
           <a class="nav-link pointer" @click="setTab('results')">Results</a>
         </li>
-        -->
         <li class="nav-item" :class="{ active: currentTab == 'about' }">
           <a class="nav-link pointer" @click="setTab('about')">About</a>
         </li>
@@ -75,6 +76,9 @@ export default {
   computed: {
     currentTab() {
       return this.$store.getters.getCurrentTab
+    },
+    gameSet() {
+      return this.$store.getters.getGameSet
     },
     thisGame() {
       return this.$store.getters.thisGame

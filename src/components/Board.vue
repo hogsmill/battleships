@@ -240,12 +240,13 @@ export default {
     }
 
     td {
-      border: 1px solid #ccc;
+      border: 1px solid #eee;
       width: $cell-width;
       height: $cell-height;
 
       &.header {
         background-color: $header-color;
+        border: none;
         color: #fff;
         font-weight: bold;
       }
