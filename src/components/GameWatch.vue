@@ -11,7 +11,7 @@
         </option>
       </select>
     </div>
-    <table v-if="watchingGame.gameState">
+    <table v-if="watchingGame.gameState" class="game-watch-table">
       <tbody>
         <tr>
           <td>
@@ -70,8 +70,18 @@ export default {
 
 <style lang="scss">
   .game-watch {
+
     td {
       border-color: #fff;
+    }
+
+
+    .game-watch-table {
+      background: none;
+
+      td {
+        border: none;
+      }
     }
   }
 </style>

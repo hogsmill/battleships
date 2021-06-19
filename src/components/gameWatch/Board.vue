@@ -1,5 +1,5 @@
 <template>
-  <td>
+  <td class="watch-board">
     <h3 :class="{ 'no-header': !player, 'next-go': player.nextGo }">
       {{ player.name }}'s Board <i v-if="player.nextGo" :title="player.name + 's go next'" class="fas fa-check-circle" />
     </h3>
@@ -52,3 +52,15 @@ export default {
   }
 }
 </script>
+
+<style lang="scss">
+  .watch-board {
+    .their-board-cell {
+      border: 1px solid #eee !important;
+    }
+
+    &.played, &.missed, &.hit {
+      border: none !important;
+    }
+  }
+</style>

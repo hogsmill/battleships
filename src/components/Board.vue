@@ -1,5 +1,5 @@
 <template>
-  <table v-if="gameSet">
+  <table v-if="gameSet" class="game-table">
     <tr>
       <td>
         <h3 :class="{ 'no-header': !theirName, 'next-go': theirName.nextGo }">
@@ -212,8 +212,17 @@ export default {
     color: #fff;
   }
 
+  .game-table {
+    background: none;
+
+    td {
+      border: none;
+    }
+  }
+
   h3 {
     border-radius: 6px;
+    color: #fff;
 
     &.next-go {
       color: #fff;
@@ -237,6 +246,7 @@ export default {
       background-color: green;
       font-weight: bold;
       color: #fff;
+      border: none;
     }
 
     td {
@@ -253,14 +263,17 @@ export default {
 
       &.hit {
         background-color: red;
+        border: none;
       }
 
       &.miss {
         background-color: #ccc;
+        border: none;
       }
 
       &.played {
         background-color: #ccc;
+        border: none;
       }
     }
   }
