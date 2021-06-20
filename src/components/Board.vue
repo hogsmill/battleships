@@ -238,6 +238,12 @@ export default {
       background-color: #fff;
     }
 
+    .their-board-cell {
+
+      &:hover {
+        background-color: #eee;
+      }
+    }
     .highlighted {
       background-color: red;
     }
