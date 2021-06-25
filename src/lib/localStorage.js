@@ -20,15 +20,12 @@ const LocalStorage = {
   },
 
   clear: function(suffix) {
-    const items = [
-      'gameName',
-      'myName'
-    ]
-    for (let i = 0; i < items.length; i++) {
-      const key = items[i] + '-' + suffix
-      localStorage.removeItem(key)
+    const expr = new RegExp('-' + suffix + '$')
+    for (let i = 0; i < localStorage.length; i++) {
+      if (localStorage.key(i).match(expr)) {
+        console.log('deleting', localStorage.key(i))
+      }
     }
-    location.reload()
   }
 
 }

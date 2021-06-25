@@ -1,6 +1,7 @@
 <template>
   <div id="app" class="mb-4">
     <appHeader />
+    <ClearStorage />
     <WalkThroughView />
     <div v-if="currentTab == 'about'">
       <AboutView />
@@ -57,6 +58,7 @@ import ls from './lib/localStorage.js'
 import params from './lib/params.js'
 
 import Header from './components/Header.vue'
+import ClearStorage from './components/ClearStorage.vue'
 import AboutView from './components/about/AboutView.vue'
 import WalkThroughView from './components/about/WalkThroughView.vue'
 
@@ -74,6 +76,7 @@ export default {
   name: 'App',
   components: {
     appHeader: Header,
+    ClearStorage,
     AboutView,
     Results,
     WalkThroughView,
@@ -92,9 +95,6 @@ export default {
     },
     currentTab() {
       return this.$store.getters.getCurrentTab
-    },
-    lsSuffix() {
-      return this.$store.getters.lsSuffix
     },
     myName() {
       return this.$store.getters.getMyName
@@ -147,7 +147,7 @@ export default {
 
     bus.$on('gameDeleted', (data) => {
       if (this.gameName == data.gameName) {
-        ls.clear(this.lsSuffix)
+        ls.clear()
         this.$store.dispatch('gameDeleted')
       }
     })
