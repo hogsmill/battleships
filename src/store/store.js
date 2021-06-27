@@ -113,6 +113,11 @@ export const store = new Vuex.Store({
     }
   },
   mutations: {
+    updateLogin: (state, payload) => {
+      state.session = payload.session
+      state.userName = payload.userName
+      state.admin = payload.loggedInAsAdmin
+    },
     updateHost: (state, payload) => {
       state.host = payload
     },
@@ -178,6 +183,9 @@ export const store = new Vuex.Store({
     }
   },
   actions: {
+    updateLogin: ({ commit }, payload) => {
+      commit('updateLogin', payload)
+    },
     updateHost: ({ commit }, payload) => {
       commit('updateHost', payload)
     },

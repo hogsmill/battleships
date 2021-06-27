@@ -111,7 +111,6 @@ export default {
     let session = localStorage.getItem('session-agilesimulations')
     if (session) {
       session = JSON.parse(session)
-      this.$store.dispatch('updateSession', session.session)
       bus.$emit('sendCheckLogin', {session: session})
     } else {
       this.clearLogin()
