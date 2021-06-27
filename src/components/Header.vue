@@ -112,23 +112,17 @@ export default {
     if (session) {
       session = JSON.parse(session)
       this.$store.dispatch('updateSession', session.session)
-      console.log('sendCheckLogin', {session: session})
       bus.$emit('sendCheckLogin', {session: session})
     } else {
-      this.$store.dispatch('updateSession', '')
+      this.clearLogin()
     }
 
     bus.$on('loginSuccess', (data) => {
-      console.log(data)
-      this.$store.dispatch('updateSession', data.session)
-      this.$store.dispatch('updateUserName', data.userName)
-      this.$store.dispatch('updateAdmin', data.loggedInAsAdmin)
+      this.$store.dispatch('updateLogin', data)
     })
 
     bus.$on('logout', () => {
-      this.$store.dispatch('updateSession', '')
-      this.$store.dispatch('updateUserName', '')
-      this.$store.dispatch('updateAdmin', false)
+      this.clearLogin()
     })
   },
   methods: {
