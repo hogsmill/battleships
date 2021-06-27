@@ -38,6 +38,13 @@
         <li class="nav-item">
           <a class="nav-link pointer" @click="show()">Feedback</a>
         </li>
+        <li class="nav-item logged-in">
+          <a class="nav-link pointer">
+            <i v-if="!session" class="fas fa-handshake-slash" title="Not logged in" />
+            <i v-if="session && !admin" class="far fa-handshake" :title="'Logged in as ' + userName" />
+            <i v-if="session && admin" class="fas fa-handshake" :title="'Logged in as ' + userName + ' (Admin)'" />
+          </a>
+        </li>
       </ul>
 
       <modal name="feedback" :height="420" :classes="['rounded', 'feedback']">
@@ -77,6 +84,15 @@ export default {
     currentTab() {
       return this.$store.getters.getCurrentTab
     },
+    session() {
+      return this.$store.getters.getSession
+    },
+    userName() {
+      return this.$store.getters.getUserName
+    },
+    admin() {
+      return this.$store.getters.getAdmin
+    },
     gameSet() {
       return this.$store.getters.getGameSet
     },
@@ -91,6 +107,27 @@ export default {
     if (location.search == '?host') {
       this.$store.dispatch('updateHost', true)
     }
+
+    let session = localStorage.getItem('session-agilesimulations')
+    if (session) {
+      session = JSON.parse(session)
+      this.$store.dispatch('updateSession', session.session)
+      bus.$emit('sendCheckLogin', {id: this.id, session: session})
+    } else {
+      this.$store.dispatch('updateSession', '')
+    }
+
+    bus.$on('loginSuccess', (data) => {
+      this.$store.dispatch('updateSession', data.session)
+      this.$store.dispatch('updateUserName', data.userName)
+      this.$store.dispatch('updateAdmin', data.loggedInAsAdmin)
+    })
+
+    bus.$on('logout', () => {
+      this.$store.dispatch('updateSession', '')
+      this.$store.dispatch('updateUserName', '')
+      this.$store.dispatch('updateAdmin', false)
+    })
   },
   methods: {
     setTab(payload) {

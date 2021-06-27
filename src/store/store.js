@@ -12,6 +12,9 @@ function agileSet(state) {
 export const store = new Vuex.Store({
   state: {
     thisGame: 'Agile Battleships',
+    session: null,
+    userName: '',
+    admin: false,
     connections: 0,
     currentTab: 'game',
     walkThrough: false,
@@ -33,6 +36,15 @@ export const store = new Vuex.Store({
     },
     lsSuffix: (state) => {
       return 'bs'
+    },
+    getSession: (state) => {
+      return state.session
+    },
+    getUserName: (state) => {
+      return state.userName
+    },
+    getAdmin: (state) => {
+      return state.admin
     },
     getHost: (state) => {
       return state.host
