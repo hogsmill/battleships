@@ -112,6 +112,7 @@ export default {
     if (session) {
       session = JSON.parse(session)
       this.$store.dispatch('updateSession', session.session)
+      console.log('sendCheckLogin', {id: this.id, session: session}))
       bus.$emit('sendCheckLogin', {id: this.id, session: session})
     } else {
       this.$store.dispatch('updateSession', '')
