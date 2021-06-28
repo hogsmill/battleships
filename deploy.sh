@@ -16,6 +16,7 @@ done
 REPO="https://github.com/hogsmill/battleships.git"
 APPS=(
   'battleships,battleships,3008'
+  'battleships-new,battleshipsNew,3036'
   'battleships-guardian,battleshipsGuardian,3026,Battleships,12345'
 )
 
