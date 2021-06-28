@@ -46,9 +46,6 @@ export const store = new Vuex.Store({
     getAdmin: (state) => {
       return state.admin
     },
-    getHost: (state) => {
-      return state.host
-    },
     getCurrentTab: (state) => {
       return state.currentTab
     },
@@ -118,8 +115,8 @@ export const store = new Vuex.Store({
       state.userName = payload.userName
       state.admin = payload.loggedInAsAdmin
     },
-    updateHost: (state, payload) => {
-      state.host = payload
+    updateAdmin: (state, payload) => {
+      state.admin = payload
     },
     updateTab: (state, payload) => {
       state.currentTab = payload
@@ -186,8 +183,8 @@ export const store = new Vuex.Store({
     updateLogin: ({ commit }, payload) => {
       commit('updateLogin', payload)
     },
-    updateHost: ({ commit }, payload) => {
-      commit('updateHost', payload)
+    updateAdmin: ({ commit }, payload) => {
+      commit('updateAdmin', payload)
     },
     updateTab: ({ commit }, payload) => {
       commit('updateTab', payload)

@@ -7,7 +7,7 @@
       <AboutView />
     </div>
     <div v-if="currentTab == 'game'" class="main">
-      <div v-if="isHost" class="connections">
+      <div v-if="admin" class="connections">
         Current server connections: {{ connections.connections }} / {{ connections.maxConnections }}
       </div>
       <div class="names">
@@ -90,8 +90,8 @@ export default {
     GameWatch
   },
   computed: {
-    isHost() {
-      return this.$store.getters.getHost
+    admin() {
+      return this.$store.getters.getAdmin
     },
     currentTab() {
       return this.$store.getters.getCurrentTab
@@ -119,8 +119,8 @@ export default {
     }
   },
   created() {
-    if (params.isParam('host')) {
-      this.$store.dispatch('updateHost', true)
+    if (location.hostname == 'localhost' && params.isParam('host')) {
+      this.$store.dispatch('updateAdmin', true)
     }
 
     let myName = localStorage.getItem('myName-bs')

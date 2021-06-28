@@ -104,10 +104,6 @@ export default {
     }
   },
   created() {
-    if (location.search == '?host') {
-      this.$store.dispatch('updateHost', true)
-    }
-
     let session = localStorage.getItem('session-agilesimulations')
     if (session) {
       session = JSON.parse(session)
