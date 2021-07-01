@@ -17,7 +17,7 @@ REPO="https://github.com/hogsmill/battleships.git"
 APPS=(
   'battleships,battleships,3008'
   'battleships-new,battleshipsNew,3036'
-  'battleships-guardian,battleshipsGuardian,3026,Battleships,12345'
+  'battleships-guardian,battleshipsGuardian,3026,Battleships'
 )
 
 for ((i = 0; i < ${#APPS[@]}; i++))
@@ -28,13 +28,12 @@ do
   COLLECTION=`echo $REC | cut -d, -f2`
   PORT=`echo $REC | cut -d, -f3`
   APPNAME=`echo $REC | cut -d, -f4`
-  PASSWORD=`echo $REC | cut -d, -f5`
 
   echo "------------------------------------------------"
   if [ -z "$APPNAME" ]; then
     echo "Installing $APP ($COLLECTION, $PORT)"
   else
-    echo "Installing $APP ($COLLECTION, $PORT, $APPNAME, $PASSWORD)"
+    echo "Installing $APP ($COLLECTION, $PORT, $APPNAME)"
   fi
   echo "------------------------------------------------"
 
@@ -47,9 +46,6 @@ do
   echo "VUE_APP_COLLECTION=$COLLECTION" >> $ENVFILE
   if [ ! -z "$APPNAME" ]; then
     echo "VUE_APP_NAME=$APPNAME" >> $ENVFILE
-  fi
-  if [ ! -z $PASSWORD ]; then
-    echo "VUE_APP_PASSWORD=$PASSWORD" >> $ENVFILE
   fi
 
   cd $DIR
