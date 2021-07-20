@@ -18,6 +18,7 @@ APPS=(
   'battleships,battleships,3008'
   'battleships-new,battleshipsNew,3036'
   'battleships-guardian,battleshipsGuardian,3026,Battleships'
+  'battleships-ratesetter,battleshipsRatesetter,3060,Battleships'
 )
 
 for ((i = 0; i < ${#APPS[@]}; i++))
