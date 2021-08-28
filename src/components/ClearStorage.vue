@@ -24,6 +24,8 @@ export default {
 
 <style>
   .clear-storage {
+    z-index: 20;
     float: right;
+    margin-right: 4px;
   }
 </style>

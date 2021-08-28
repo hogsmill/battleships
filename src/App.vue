@@ -1,7 +1,8 @@
 <template>
   <div id="app" class="mb-4">
-    <appHeader />
+    <Header />
     <ClearStorage />
+    <RateThisGame />
     <WalkThroughView />
     <div v-if="currentTab == 'about'">
       <AboutView />
@@ -58,6 +59,7 @@ import ls from './lib/localStorage.js'
 import params from './lib/params.js'
 
 import Header from './components/Header.vue'
+import RateThisGame from './components/RateThisGame.vue'
 import ClearStorage from './components/ClearStorage.vue'
 import AboutView from './components/about/AboutView.vue'
 import WalkThroughView from './components/about/WalkThroughView.vue'
@@ -75,8 +77,9 @@ import GameWatch from './components/GameWatch.vue'
 export default {
   name: 'App',
   components: {
-    appHeader: Header,
+    Header,
     ClearStorage,
+    RateThisGame,
     AboutView,
     Results,
     WalkThroughView,

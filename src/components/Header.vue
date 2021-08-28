@@ -80,6 +80,11 @@ import bus from '../socket.js'
 import mailFuns from '../lib/mail.js'
 
 export default {
+  data() {
+    return {
+      connectToAgileSimulations: location.hostname != 'localhost'
+    }
+  },
   computed: {
     currentTab() {
       return this.$store.getters.getCurrentTab
@@ -121,6 +126,12 @@ export default {
     })
   },
   methods: {
+    clearLogin() {
+      if (this.connectToAgileSimulations) {
+        const data = {session: '', userName: '', loggedInAsAdmin: false}
+        this.$store.dispatch('updateLogin', data)
+      }
+    },
     setTab(payload) {
       this.$store.dispatch('updateTab', payload)
     },
