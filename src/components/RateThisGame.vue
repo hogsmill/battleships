@@ -25,7 +25,7 @@ export default {
   methods: {
     rateThisGame() {
       console.log('here')
-      this.showRateSelect = true
+      this.showRateSelect = !this.showRateSelect
     },
     rateClass(n) {
       let str = n > this.current ? 'far' : 'fas'
