@@ -52,12 +52,10 @@ do
   fi
 
   cd $DIR
-  if [ "$NEW" == "true" ]
-  then
-    rm $DIR/package-lock.json
-    rm -rf $DIR/node_modules
-  fi
-  
+
+  rm $DIR/package-lock.json
+  rm -rf $DIR/node_modules
+
   PWD=`pwd`
   APP=`basename $PWD`
   git stash
@@ -89,7 +87,8 @@ do
       kill -9 $SERVER
     fi
   fi
-
+  rm -rf $DIR/node_modules/.cache
+  rm -rf $DIR/dist
 done
 
 ps -ef | grep php | grep outdated
