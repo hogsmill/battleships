@@ -26,6 +26,7 @@ ROUTES=(
   'ratesetter','Ratesetter'
   'eagile','EverydayAgile'
   'and','And'
+  'richemont','Richemont'
 )
 
 for ((i = 0; i < ${#ROUTES[@]}; i++))
@@ -44,26 +45,6 @@ do
   fi
   APPNAME=$MAINNAME
   let PORT=$BASEPORT+$i
-
-#REPO="https://github.com/hogsmill/battleships.git"
-#MAINAPP="battleships"
-#APPS=(
-#  'battleships,battleships,3008'
-#  'battleships-new,battleshipsNew,3036'
-#  'battleships-guardian,battleshipsGuardian,3026,Battleships'
-#  'battleships-ratesetter,battleshipsRatesetter,3060,Battleships'
-#  'battleships-eagile,battleshipsEverydayAgile,3068,Battleships'
-#  'battleships-and,battleshipsAnd,3107,Battleships'
-#)
-
-#for ((i = 0; i < ${#APPS[@]}; i++))
-#do
-#  REC="${APPS[$i]}"
-#
-#  APP=`echo $REC | cut -d, -f1`
-#  COLLECTION=`echo $REC | cut -d, -f2`
-#  PORT=`echo $REC | cut -d, -f3`
-#  APPNAME=`echo $REC | cut -d, -f4`
 
   echo "------------------------------------------------"
   if [ -z "$APPNAME" ]; then
