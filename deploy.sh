@@ -22,7 +22,7 @@ MAINNAME="Agile Battleships"
 ROUTES=(
   '',''
   'new','New'
-  'guardian','Guardian'
+  'abn','Abn'
   'ratesetter','Ratesetter'
   'eagile','EverydayAgile'
   'and','And'
