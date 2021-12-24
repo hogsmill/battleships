@@ -27,8 +27,8 @@ ROUTES=(
   'eagile','EverydayAgile'
   'and','And'
   'richemont','Richemont'
-  'bud', 'Bud'
-  'mattphillip', 'MattPhillip'
+  'bud','Bud'
+  'mattphillip','MattPhillip'
 )
 
 for ((i = 0; i < ${#ROUTES[@]}; i++))
