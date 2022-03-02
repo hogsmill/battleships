@@ -34,7 +34,7 @@ export default {
       return game.myBoard(this.gameState, this.myName).agile == 'no'
     },
     setAgile() {
-      bus.$emit('sendSetAgile', {gameName: this.gameName})
+      bus.emit('sendSetAgile', {gameName: this.gameName})
     }
   }
 }

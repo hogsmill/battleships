@@ -142,7 +142,7 @@ export default {
         if (moves >= this.maxMoves) {
           alert('You have no more moves')
         } else {
-          bus.$emit('sendMakeMove', {gameName: this.gameName, name: this.myName, row: r, column: c})
+          bus.emit('sendMakeMove', {gameName: this.gameName, name: this.myName, row: r, column: c})
         }
       }
     },
@@ -182,7 +182,7 @@ export default {
           c = board.placeN(c, this.selectedBoat)
         }
         console.log('Placing ' + this.selectedBoat.name + ' ' + this.selectedOrientation + 'ly at (' + this.rows[r] + ', ' + this.columns[c] + ')')
-        bus.$emit('sendPlaceBoat', {gameName: this.gameName, name: this.myName, boat: this.selectedBoat, orientation: this.selectedOrientation, row: r, column: c})
+        bus.emit('sendPlaceBoat', {gameName: this.gameName, name: this.myName, boat: this.selectedBoat, orientation: this.selectedOrientation, row: r, column: c})
         this.selectedBoat = ''
         this.selectedOrientation = ''
       }

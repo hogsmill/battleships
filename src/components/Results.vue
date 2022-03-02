@@ -53,9 +53,9 @@ export default {
     }
   },
   created() {
-    bus.$emit('sendLoadResults')
+    bus.emit('sendLoadResults')
 
-    bus.$on('loadResults', (data) => {
+    bus.on('loadResults', (data) => {
     const d1 = JSON.parse(JSON.stringify(data[0]))
     const d2 = JSON.parse(JSON.stringify(data[0]))
     const d3 = JSON.parse(JSON.stringify(data[0]))

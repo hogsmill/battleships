@@ -44,13 +44,13 @@ export default {
     },
   },
   created() {
-    bus.$emit('sendLoadGames')
+    bus.emit('sendLoadGames')
 
-    bus.$on('loadGames', (data) => {
+    bus.on('loadGames', (data) => {
       this.$store.dispatch('loadGames', data)
     })
 
-    bus.$on('updateWatchingGame', (data) => {
+    bus.on('updateWatchingGame', (data) => {
       if (this.watchingGame.gameName == data.game.gameName) {
         this.$store.dispatch('setWatchingGame', data)
       }

@@ -28,27 +28,7 @@
     </div>
     <GameWatch v-if="currentTab == 'gameWatch'" />
     <Results v-if="currentTab == 'results'" />
-
-    <modal name="game-over" :height="150" :classes="['rounded', 'game-over']">
-      <div class="mr-2 mt-1">
-        <button type="button" class="close" @click="hide" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="mt-4">
-        <h4>
-          Game Over:
-          <span v-if="result.allMovesDone">{{ getScore() }}</span>
-          <span v-if="result.player == 0">{{ getScore() }}</span>
-          <span v-if="result.player == 1">{{ getScore() }}</span>
-        </h4>
-        <div>
-          <button class="btn btn-sm btn-secondary smaller-font" @click="hide">
-            OK
-          </button>
-        </div>
-      </div>
-    </modal>
+    <Modals />
   </div>
 </template>
 
@@ -59,6 +39,7 @@ import ls from './lib/localStorage.js'
 import params from './lib/params.js'
 
 import Header from './components/Header.vue'
+import Modals from './components/Modals.vue'
 import RateThisGame from './components/RateThisGame.vue'
 import ClearStorage from './components/ClearStorage.vue'
 import AboutView from './components/about/AboutView.vue'
@@ -78,6 +59,7 @@ export default {
   name: 'App',
   components: {
     Header,
+    Modals,
     ClearStorage,
     RateThisGame,
     AboutView,
@@ -114,9 +96,6 @@ export default {
     gameState() {
       return this.$store.getters.getGameState
     },
-    result() {
-      return this.$store.getters.getResult
-    },
     connections() {
       return this.$store.getters.getConnections
     }
@@ -134,84 +113,59 @@ export default {
 
     const gameName = localStorage.getItem('gameName-bs')
     if (gameName) {
-      bus.$emit('sendLoadGame', {gameName: gameName})
+      bus.emit('sendLoadGame', {gameName: gameName})
       this.$store.dispatch('updateGameName', gameName)
     }
 
     if (myName && gameName) {
-      bus.$emit('sendAddPlayer', {gameName: gameName, player: myName})
+      bus.emit('sendAddPlayer', {gameName: gameName, player: myName})
     }
 
-    bus.$on('loadGame', (data) => {
+    bus.on('loadGame', (data) => {
       if (this.gameName == data.gameName) {
         this.$store.dispatch('loadGame', data)
       }
     })
 
-    bus.$on('gameDeleted', (data) => {
+    bus.on('gameDeleted', (data) => {
       if (this.gameName == data.gameName) {
         ls.clear()
         this.$store.dispatch('gameDeleted')
       }
     })
 
-    bus.$on('tooManyPlayers', (data) => {
+    bus.on('tooManyPlayers', (data) => {
       if (this.gameName == data.gameName) {
         alert('That game already has 2 players')
       }
     })
 
-    bus.$on('updateGameState', (data) => {
+    bus.on('updateGameState', (data) => {
       if (this.gameName == data.gameName) {
         this.$store.dispatch('updateGameState', data)
       }
     })
 
-    bus.$on('removePlayer', (data) => {
+    bus.on('removePlayer', (data) => {
       if (this.gameName == data.gameName) {
         this.$store.dispatch('removePlayer', data)
       }
     })
 
-    bus.$on('gameOver', (data) => {
+    bus.on('gameOver', (data) => {
       if (this.gameName == data.gameName) {
         this.$store.dispatch('gameOver', data)
         this.show()
       }
     })
 
-    bus.$on('updateConnections', (data) => {
+    bus.on('updateConnections', (data) => {
       this.$store.dispatch('updateConnections', data)
     })
   },
   methods: {
-    show () {
-      this.$modal.show('game-over')
-    },
-    hide () {
-      this.$modal.hide('game-over')
-    },
-    getScore() {
-      let result = ''
-      if (this.gameSet) {
-        const score0 = this.gameState[0].score
-        const score1 = this.gameState[1].score
-        let winner, loser
-
-        if (score0 == score1) {
-          result = 'Draw - ' + this.gameState[0].name + ':' + this.gameState[0].score + ', ' + this.gameState[1].name + ':' + this.gameState[1].score
-        } else {
-          if (score0 > score1) {
-            winner = this.gameState[0]
-            loser = this.gameState[1]
-          } else {
-            winner = this.gameState[1]
-            loser = this.gameState[0]
-          }
-          result = winner.name + ' beats ' + loser.name + ' ' + winner.score + '/' + loser.score
-        }
-      }
-      return result
+    show() {
+      this.$store.dispatch('showModal', 'gameOver')
     }
   }
 }

@@ -1,7 +1,5 @@
-import Vue from 'vue'
-import Vuex from 'vuex'
 
-Vue.use(Vuex)
+import { createStore } from 'vuex'
 
 function agileSet(state) {
   return state.gameState.length == 2 && Object.keys(state.gameState[0]).find((k) => {
@@ -9,15 +7,20 @@ function agileSet(state) {
   })
 }
 
-export const store = new Vuex.Store({
+export const store = createStore({
   state: {
     thisGame: 'Agile Battleships',
     session: null,
     userName: '',
     admin: false,
     connections: 0,
+    modals: {
+      feedback: false,
+      walkThrough: false,
+      setGame: false,
+      gameOver: false
+    },
     currentTab: 'game',
-    walkThrough: false,
     myName: '',
     theirName: '',
     gameName: '',
@@ -46,11 +49,11 @@ export const store = new Vuex.Store({
     getAdmin: (state) => {
       return state.admin
     },
+    getModals: (state) => {
+      return state.modals
+    },
     getCurrentTab: (state) => {
       return state.currentTab
-    },
-    getWalkThrough: (state) => {
-      return state.walkThrough
     },
     getGames: (state) => {
       return state.games
@@ -118,11 +121,18 @@ export const store = new Vuex.Store({
     updateAdmin: (state, payload) => {
       state.admin = payload
     },
+    showModal: (state, payload) => {
+      const modals = Object.keys(state.modals)
+      for (let i = 0; i < modals.length; i++) {
+        state.modals[modals[i]] = false
+      }
+      state.modals[payload] = true
+    },
+    hideModal: (state, payload) => {
+      state.modals[payload] = false
+    },
     updateTab: (state, payload) => {
       state.currentTab = payload
-    },
-    updateWalkThrough: (state, payload) => {
-      state.walkThrough = payload
     },
     setMyName: (state, payload) => {
       state.myName = payload
@@ -186,11 +196,14 @@ export const store = new Vuex.Store({
     updateAdmin: ({ commit }, payload) => {
       commit('updateAdmin', payload)
     },
+    showModal: ({ commit }, payload) => {
+      commit('showModal', payload)
+    },
+    hideModal: ({ commit }, payload) => {
+      commit('hideModal', payload)
+    },
     updateTab: ({ commit }, payload) => {
       commit('updateTab', payload)
-    },
-    updateWalkThrough: ({ commit }, payload) => {
-      commit('updateWalkThrough', payload)
     },
     setMyName: ({ commit }, payload) => {
       commit('setMyName', payload)

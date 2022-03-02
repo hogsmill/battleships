@@ -24,7 +24,6 @@ export default {
   },
   methods: {
     rateThisGame() {
-      console.log('here')
       this.showRateSelect = !this.showRateSelect
     },
     rateClass(n) {
@@ -39,7 +38,7 @@ export default {
     setRating(n) {
       alert('Thank you for rating ' + this.thisGame)
       this.showRateSelect = false
-      bus.$emit('sendRating', {game: this.thisGame, rating: n})
+      bus.emit('sendRating', {game: this.thisGame, rating: n})
     }
   }
 }

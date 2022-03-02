@@ -8,7 +8,7 @@
       </p>
       <p>
         Everyone is familiar with this game - you simply place your ships on your board, and
-        your opponent places his. You then have 40 shots to destroy your opponents fleet. Yoi
+        your opponent places his. You then have 40 shots to destroy your opponents fleet. You
         do this by clicking on the squares on your opponent's board. In real life, they will
         tell you if you hit a ship or not; in the online version, the cells on the board change
         colour to give instant feedback.
