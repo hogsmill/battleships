@@ -22,7 +22,7 @@ import bus from '../../socket.js'
 
 import { v4 as uuidv4 } from 'uuid'
 
-import { $vfm, VueFinalModal } from 'vue-final-modal'
+import { VueFinalModal } from 'vue-final-modal'
 
 export default {
   components: {

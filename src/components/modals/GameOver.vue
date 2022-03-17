@@ -22,7 +22,7 @@
 </template>
 
 <script>
-import { $vfm, VueFinalModal } from 'vue-final-modal'
+import { VueFinalModal } from 'vue-final-modal'
 
 import Facilitation from './walkThrough/Facilitation.vue'
 
